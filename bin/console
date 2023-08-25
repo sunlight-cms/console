@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use SunlightConsole\Cli;
+
+require $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+set_error_handler(function ($severity, $message, $file, $line) {
+    if ($severity & error_reporting()) {
+        throw new ErrorException($message, 0, $severity, $file, $line);
+    }
+
+    return true;
+});
+
+exit((new Cli())->run(array_slice($argv, 1)));

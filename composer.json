@@ -1,0 +1,29 @@
+{
+    "name": "sunlight-cms/console",
+    "description": "Sunlight CMS command-line utilities",
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/sunlight-cms/sunlight-cms.git"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "composer/semver": "^3.3.2",
+        "kuria/debug": "^4.0.1",
+        "kuria/options": "^2.1"
+    },
+    "require-dev": {
+        "sunlight-cms/sunlight-cms": "dev-master",
+        "vimeo/psalm": "^5.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "SunlightConsole\\": "src"
+        }
+    },
+    "bin": [
+        "bin/console"
+    ]
+}

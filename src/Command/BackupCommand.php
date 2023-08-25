@@ -1,0 +1,56 @@
+<?php declare(strict_types=1);
+
+namespace SunlightConsole\Command;
+
+use SunlightConsole\Command;
+use SunlightConsole\Argument\ArgumentDefinition;
+use Sunlight\Backup\BackupBuilder;
+
+class BackupCommand extends Command
+{
+    function getHelp(): string
+    {
+        return 'create a backup';
+    }
+
+    protected function defineArguments(): array
+    {
+        return [
+            ArgumentDefinition::flag('database', 'include a database dump'),
+            ArgumentDefinition::flag('plugins', 'backup plugins'),
+            ArgumentDefinition::flag('images', 'backup images'),
+            ArgumentDefinition::flag('upload', 'backup upload directory'),
+            ArgumentDefinition::argument(0, 'output-path', 'path where to write the .zip file', true),
+        ];
+    }
+
+    function run(array $args): int
+    {
+        $this->utils->initCms($this->cli->getProjectRoot());
+
+        $this->output->log('Creating a backup');
+
+        $builder = new BackupBuilder();
+        $builder->makeDynamicPathOptionalInFullBackup('plugins');
+        $builder->setDatabaseDumpEnabled(isset($args['database']));
+        
+        if (!isset($args['plugins'])) {
+            $builder->disableDynamicPath('plugins');
+        }
+        if (!isset($args['images'])) {
+            $builder->disableDynamicPath('images_user');
+            $builder->disableDynamicPath('images_articles');
+            $builder->disableDynamicPath('images_galleries');
+        }
+        if (!isset($args['upload'])) {
+            $builder->disableDynamicPath('upload');
+        }
+
+        $tmpFile = $builder->build();
+        $tmpFile->move($args['output-path']);
+
+        $this->output->log('Done');
+
+        return 0;
+    }
+}

@@ -1,0 +1,53 @@
+<?php declare(strict_types=1);
+
+namespace SunlightConsole\Command\Database;
+
+use SunlightConsole\Command;
+use SunlightConsole\Argument\ArgumentDefinition;
+use Sunlight\Database\Database as DB;
+use Sunlight\Database\DatabaseLoader;
+use Sunlight\Database\SqlDumper;
+use Sunlight\Database\SqlReader;
+
+class ImportCommand extends Command
+{
+    function getHelp(): string
+    {
+        return 'import a SQL dump';
+    }
+
+    protected function defineArguments(): array
+    {
+        return [
+            ArgumentDefinition::option('prefix', 'prefix used in the SQL dump to replace with current prefix'),
+            ArgumentDefinition::argument(0, 'sql-path', 'path to a SQL file (otherwise reads from STDIN)'),
+        ];
+    }
+
+    function run(array $args): int
+    {
+        $this->utils->initCms($this->cli->getProjectRoot());
+
+        $this->output->log('Reading SQL');
+
+        if (isset($args['sql-path'])) {
+            $reader = SqlReader::fromFile($args['sql-path']);
+        } else {
+            $reader = new SqlReader(stream_get_contents(STDIN));
+        }
+
+        $this->output->log('Importing SQL');
+
+        DatabaseLoader::load(
+            $reader,
+            $args['prefix'] ?? null,
+            isset($args['prefix'])
+                ? DB::$prefix
+                : null
+        );
+
+        $this->output->log('Done');
+
+        return 0;
+    }
+}
