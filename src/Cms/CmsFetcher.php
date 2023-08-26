@@ -45,10 +45,10 @@ class CmsFetcher
         );
     }
 
-    function fetch(bool $ifNotExist = false): void
+    function fetch(bool $ifNotExist = false, bool $forceInstaller = false): void
     {
         $projectConfig = $this->cli->getProjectConfig();
-        $extractor = $this->createExtractor($projectConfig->cms);
+        $extractor = $this->createExtractor($projectConfig->cms, $forceInstaller);
 
         // abort if files exist?
         if ($ifNotExist && $extractor->filesAlreadyExist()) {
@@ -91,11 +91,11 @@ class CmsFetcher
         );
     }
 
-    private function createExtractor(CmsConfig $cmsConfig): CmsExtractor
+    private function createExtractor(CmsConfig $cmsConfig, bool $forceInstaller): CmsExtractor
     {
         $extractor = new CmsExtractor($this->cli->getProjectRoot());
 
-        if ($cmsConfig->installer && !$extractor->filesAlreadyExist()) {
+        if ($forceInstaller || $cmsConfig->installer && !$extractor->filesAlreadyExist()) {
             $extractor->addInstaller();
         }
 

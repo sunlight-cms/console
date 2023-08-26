@@ -25,7 +25,7 @@ abstract class Command
         $this->name = $name;
     }
 
-    function getName(): string
+    final function getName(): string
     {
         return $this->name;
     }
@@ -35,7 +35,7 @@ abstract class Command
     /**
      * @return array<array-key, ArgumentDefinition>
      */
-    function getArguments(): array
+    final function getArguments(): array
     {
         if ($this->argMap === null) {
             $this->argMap = [];

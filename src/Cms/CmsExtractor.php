@@ -33,7 +33,7 @@ class CmsExtractor
 
     function addInstaller(): void
     {
-        $this->paths['install/'] = false;
+        $this->paths['install/'] = true;
     }
 
     function filesAlreadyExist(): bool
