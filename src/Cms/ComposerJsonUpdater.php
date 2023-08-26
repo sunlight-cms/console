@@ -53,7 +53,7 @@ class ComposerJsonUpdater
 
             if ($archiveIsSemverMatched && $extractionResult->version !== null) {
                 $newVersion = '~' . $extractionResult->version;
-                $this->output->log('Setting version to %s', $newVersion);
+                $this->output->log('Setting cms.version to %s', $newVersion);
                 $projectPackage['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['cms']['version'] = $newVersion;
             }
             
