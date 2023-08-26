@@ -51,8 +51,14 @@ class QueryCommand extends Command
 
                 $this->output->write(']');
             } else {
-                while ($row = DB::row($result)) {
-                    $this->output->write(Dumper::dump($row));
+                if (DB::size($result) > 0) {
+                    $index = 0;
+
+                    while ($row = DB::row($result)) {
+                        $this->output->write('#%d %s', ++$index, Dumper::dump($row));
+                    }
+                } else {
+                    $this->output->write('No rows returned');
                 }
             }
         } else {
