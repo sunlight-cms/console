@@ -26,6 +26,7 @@ class SetCommand extends Command
             ArgumentDefinition::option('db.prefix', 'table name prefix'),
             ArgumentDefinition::flagOrOption('secret', 'secret hash (pass no value to generate random)'),
             ArgumentDefinition::option('fallback_lang', 'fallback language plugin name'),
+            ArgumentDefinition::option('fallback_base_url', 'fallback base URL'),
             ArgumentDefinition::option('trusted_proxies', 'comma-separated trusted proxy IPs (or CIDR)'),
             ArgumentDefinition::option('trusted_proxy_headers', 'forwarded/x-forwarded/all or null'),
             ArgumentDefinition::option('cache', 'cache enabled 1/0'),
@@ -63,6 +64,7 @@ class SetCommand extends Command
                     break;
 
                 // ?string
+                case 'fallback_base_url':
                 case 'timezone':
                     $config[$key] = !empty($value) && $value !== 'null' ? $value : null;
                     break;

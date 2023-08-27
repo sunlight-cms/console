@@ -6,7 +6,6 @@ use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Database\DatabaseException;
-use Kuria\Debug\Dumper;
 use Sunlight\Util\Json;
 
 class QueryCommand extends Command
@@ -55,7 +54,7 @@ class QueryCommand extends Command
                     $index = 0;
 
                     while ($row = DB::row($result)) {
-                        $this->output->write('#%d %s', ++$index, Dumper::dump($row));
+                        $this->output->write('#%d %s', ++$index, $this->utils->dump($row));
                     }
                 } else {
                     $this->output->write('No rows returned');

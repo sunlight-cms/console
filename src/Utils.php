@@ -2,12 +2,23 @@
 
 namespace SunlightConsole;
 
+use Kuria\Debug\Dumper;
 use Sunlight\Core;
 use Sunlight\Message;
 use Sunlight\Plugin\Plugin;
 
 class Utils
 {
+    function downloadFile(string $url, string $targetPath): void
+    {
+        $targetHandle = fopen($targetPath, 'w');
+        $urlHandle = fopen($url, 'r');
+
+        if (stream_copy_to_stream($urlHandle, $targetHandle) === false) {
+            throw new \Exception(sprintf('Could not download file from "%s"', $url));
+        }
+    }
+
     function loadJsonFromFile(string $path): array
     {
         $data = @file_get_contents($path);
@@ -30,16 +41,6 @@ class Utils
         return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
-    function downloadFile(string $url, string $targetPath): void
-    {
-        $targetHandle = fopen($targetPath, 'w');
-        $urlHandle = fopen($url, 'r');
-
-        if (stream_copy_to_stream($urlHandle, $targetHandle) === false) {
-            throw new \Exception(sprintf('Could not download file from "%s"', $url));
-        }
-    }
-
     function renderMessage(Message $message): string
     {
         switch ($message->getType()) {
@@ -59,6 +60,11 @@ class Utils
     function htmlToPlaintext(string $html): string
     {
         return html_entity_decode(strip_tags($html));
+    }
+
+    function dump($value, int $maxLevel = 10): string
+    {
+        return Dumper::dump($value, $maxLevel, 255);
     }
 
     /**
@@ -94,7 +100,7 @@ class Utils
             Core::$classLoader = require $projectRoot . '/vendor/autoload.php';
 
             // init core
-            Core::init($projectRoot . '/', $options + ['session_enabled' => false, 'debug' => true]);
+            Core::init($options + ['session_enabled' => false, 'debug' => true]);
         } catch (\Throwable $e) {
             throw new \Exception(sprintf(
                 'Could not initialize CMS: %s in %s:%d',

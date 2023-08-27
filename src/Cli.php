@@ -189,6 +189,7 @@ class Cli
             'cms.update' => Command\Cms\UpdateCommand::class,
             'config.create' => Command\Config\CreateCommand::class,
             'config.set' => Command\Config\SetCommand::class,
+            'config.dump' => Command\Config\DumpCommand::class,
             'plugin.list' => Command\Plugin\ListCommand::class,
             'plugin.show' => Command\Plugin\ShowCommand::class,
             'plugin.install' => Command\Plugin\InstallCommand::class,

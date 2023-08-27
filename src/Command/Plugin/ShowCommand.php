@@ -4,7 +4,6 @@ namespace SunlightConsole\Command\Plugin;
 
 use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
-use Kuria\Debug\Dumper;
 
 class ShowCommand extends Command
 {
@@ -32,9 +31,9 @@ class ShowCommand extends Command
             or $this->cli->fail('Could not find plugin "%s"', $args['plugin']);
 
         if (isset($args['object'])) {
-            $this->output->write(Dumper::dump($plugin, 2, 255));
+            $this->output->write($this->utils->dump($plugin, 2));
         } elseif (isset($args['options'])) {
-            $this->output->write(Dumper::dump($plugin->getOptions(), 4));
+            $this->output->write($this->utils->dump($plugin->getOptions(), 4));
         } else {
             $this->output->write('ID: %s', $plugin->getId());
             $this->output->write('Type: %s', $plugin->getType());

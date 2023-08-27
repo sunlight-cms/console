@@ -6,7 +6,6 @@ use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Database\DatabaseLoader;
-use Sunlight\Database\SqlDumper;
 use Sunlight\Database\SqlReader;
 
 class ImportCommand extends Command
