@@ -78,8 +78,13 @@ class CmsFetcher
             @unlink($tempPath);
         }
 
-        $this->output->log('Written %d files', $result->numWrittenFiles);
-        $this->output->log('CMS version is %s', $result->version);
+        if ($result->numWrittenFiles !== 0) {
+            $this->output->log('Written %d files', $result->numWrittenFiles);
+        } else {
+            $this->output->log('No files written - maybe zip-paths-prefix is wrong?');
+        }
+        
+        $this->output->log('CMS version is %s', $result->version ?? 'unknown');
 
         // update composer.json
         $this->output->log('Updating composer.json');
