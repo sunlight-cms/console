@@ -4,6 +4,8 @@ namespace SunlightConsole;
 
 use Kuria\Debug\Dumper;
 use Sunlight\Core;
+use Sunlight\Log\LogEntry;
+use Sunlight\Logger;
 use Sunlight\Message;
 use Sunlight\Plugin\Plugin;
 
@@ -32,6 +34,38 @@ class Utils
             '%s %s',
             $symbol,
             $message->isHtml() ? $this->htmlToPlaintext($message->getMessage()) : $message->getMessage()
+        );
+    }
+
+    function renderLogEntry(LogEntry $entry): string
+    {
+        switch ($entry->level) {
+            case Logger::EMERGENCY:
+            case Logger::ALERT:
+            case Logger::CRITICAL:
+            case Logger::ERROR:
+                $symbol = '🔴';
+                break;
+            case Logger::WARNING:
+                $symbol = '🟡';
+                break;
+            case Logger::NOTICE:
+                $symbol = '🔵';
+                break;
+            case Logger::INFO:
+                $symbol = '🔵';
+                break;
+            default:
+                $symbol = '🟤';
+                break;
+        }
+
+        return sprintf(
+            '[%s] %s %s: %s',
+            $entry->getDateTime()->format('Y-m-d H:i:s.u'),
+            $symbol,
+            $entry->category,
+            $entry->message
         );
     }
 

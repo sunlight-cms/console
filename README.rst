@@ -216,6 +216,8 @@ about the available commands.)
   db.dump                dump database
   db.import              import a SQL dump
   db.query               execute a SQL query
+  log.search             search log entries
+  log.monitor            continuously print out log entries
   user.reset-password    reset password for the given user
   backup                 create a backup
   clear-cache            clear the cache

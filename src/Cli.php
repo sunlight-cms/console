@@ -197,6 +197,8 @@ class Cli
             'db.dump' => Command\Database\DumpCommand::class,
             'db.import' => Command\Database\ImportCommand::class,
             'db.query' => Command\Database\QueryCommand::class,
+            'log.search' => Command\Log\SearchCommand::class,
+            'log.monitor' => Command\Log\MonitorCommand::class,
             'user.reset-password' => Command\User\ResetPasswordCommand::class,
             'backup' => Command\BackupCommand::class,
             'clear-cache' => Command\ClearCacheCommand::class,
