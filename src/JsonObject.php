@@ -2,6 +2,9 @@
 
 namespace SunlightConsole;
 
+/**
+ * @extends \ArrayObject<string, mixed>
+ */
 class JsonObject extends \ArrayObject
 {
     private const DEFAULT_FLAGS = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
