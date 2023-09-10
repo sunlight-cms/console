@@ -187,6 +187,7 @@ class Cli
             'cms.info' => Command\Cms\InfoCommand::class,
             'cms.download' => Command\Cms\DownloadCommand::class,
             'cms.update' => Command\Cms\UpdateCommand::class,
+            'cms.patch' => Command\Cms\PatchCommand::class,
             'config.create' => Command\Config\CreateCommand::class,
             'config.set' => Command\Config\SetCommand::class,
             'config.dump' => Command\Config\DumpCommand::class,

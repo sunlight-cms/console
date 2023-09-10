@@ -18,7 +18,7 @@ class InstallCommand extends Command
     protected function defineArguments(): array
     {
         return [
-            ArgumentDefinition::option('from-zip', 'path to a plugin ZIP file'),
+            ArgumentDefinition::option('from-path', 'path to a plugin ZIP file'),
             ArgumentDefinition::option('from-url', 'plugin ZIP download URL'),
             ArgumentDefinition::flag('skip-existing', 'skip existing plugins'),
         ];
@@ -28,8 +28,8 @@ class InstallCommand extends Command
     {
         $this->utils->initCms($this->cli->getProjectRoot());
         
-        if (isset($args['from-zip'])) {
-            $path = $args['from-zip'];
+        if (isset($args['from-path'])) {
+            $path = $args['from-path'];
         } elseif (isset($args['from-url'])) {
             $tmpFile = Filesystem::createTmpFile();
             $path = $tmpFile->getPathname();
@@ -37,7 +37,7 @@ class InstallCommand extends Command
             $this->output->log('Downloading %s', $args['from-url']);
             $this->utils->downloadFile($args['from-url'], $path);
         } else {
-            $this->cli->fail('Specify --from-zip or --from-url');
+            $this->cli->fail('Specify --from-path or --from-url');
         }
 
         $merge = isset($args['skip-existing']);
