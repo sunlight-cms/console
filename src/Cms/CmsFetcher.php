@@ -45,13 +45,13 @@ class CmsFetcher
         );
     }
 
-    function fetch(bool $ifNotExist = false, bool $forceInstaller = false): void
+    function fetch(bool $overwrite = false, bool $forceInstaller = false): void
     {
         $projectConfig = $this->cli->getProjectConfig();
         $extractor = $this->createExtractor($projectConfig->cms, $forceInstaller);
 
         // abort if files exist?
-        if ($ifNotExist && $extractor->filesAlreadyExist()) {
+        if (!$overwrite && $extractor->filesAlreadyExist()) {
             $this->output->log('CMS files already exist');
 
             return;

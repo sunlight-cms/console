@@ -62,10 +62,10 @@ from the specified URL. In that case the version string can have any format.
 If `cms.archive <archive_>`_ is configured to use a git repository, the version
 string can have these formats:
 
-- ``"dev-master"`` - will download the latest version of the specified branch
-- ``8.0.0`` - will download the exact tagged version
+- ``8.0.0`` - will download the exact tagged version (recommended)
 - ``~8.0.0`` - will find and download a tagged version matching
   the `constraint <https://getcomposer.org/doc/articles/versions.md>`_
+- ``"dev-master"`` - will download the latest version of the specified branch
 
 
 archive
@@ -182,9 +182,7 @@ updates will be made to *composer.json*:
 - name, description and license will be unset
 - the ``is-fresh-project`` option will be unset
 - if a semver version constraint has been used to locate the CMS archive,
-  the `cms.version <version_>`_ will be automatically changed to use
-  a `tilde version range <https://getcomposer.org/doc/articles/versions.md#tilde-version-range->`_
-  with the installed version number
+  the `cms.version <version_>`_ will be automatically changed to the installed version number
 
 
 Usage
@@ -206,10 +204,11 @@ about the available commands.)
 ::
 
   cms.info               show information about the CMS
-  cms.download           create CMS files in the project if they do not exist
-  cms.update             update CMS files in the project
+  cms.download           download CMS files
+  cms.patch              apply a patch to CMS files in the project
   config.create          create config.php with default contents
   config.set             modify an option in config.php
+  config.dump            dump config.php contents
   plugin.list            list all plugins
   plugin.show            show information about a plugin
   plugin.install         install plugin from a ZIP file or an URL
