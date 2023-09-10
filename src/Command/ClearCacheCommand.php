@@ -27,7 +27,7 @@ class ClearCacheCommand extends Command
             $this->utils->initCms($this->cli->getProjectRoot());
 
             if ($args['plugin'] === '') {
-                $this->output->log('Clearing plugin cache');
+                $this->output->write('Clearing plugin cache');
                 Core::$pluginManager->clearCache();
             } else {
                 $plugin = $this->utils->findPlugin($args['plugin']);
@@ -35,15 +35,15 @@ class ClearCacheCommand extends Command
                 $plugin !== null
                     or $this->cli->fail('Could not find plugin "%s"', $args['plugin']);
 
-                $this->output->log('Clearing cache for plugin "%s"', $plugin->getId());
+                $this->output->write('Clearing cache for plugin "%s"', $plugin->getId());
                 $plugin->getCache()->clear();
             }
         } else {
-            $this->output->log('Clearing cache');
+            $this->output->write('Clearing cache');
             ComposerBridge::clearCache();
         }
 
-        $this->output->log('Done');
+        $this->output->write('Done');
 
         return 0;
     }

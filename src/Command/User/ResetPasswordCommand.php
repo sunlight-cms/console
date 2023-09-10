@@ -42,8 +42,8 @@ class ResetPasswordCommand extends Command
 
         DB::update('user', $cond, ['password' => Password::create($newPassword)->build()]);
 
-        $this->output->log('Changed password for user %d (%s)', $user['id'], $user['username']);
-        $this->output->log('New password: %s', $newPassword);
+        $this->output->write('Changed password for user %d (%s)', $user['id'], $user['username']);
+        $this->output->write('New password: %s', $newPassword);
 
         return 0;
     }

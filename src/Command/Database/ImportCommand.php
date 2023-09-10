@@ -27,7 +27,7 @@ class ImportCommand extends Command
     {
         $this->utils->initCms($this->cli->getProjectRoot());
 
-        $this->output->log('Reading SQL');
+        $this->output->write('Reading SQL');
 
         if (isset($args['sql-path'])) {
             $reader = SqlReader::fromFile($args['sql-path']);
@@ -35,7 +35,7 @@ class ImportCommand extends Command
             $reader = new SqlReader(stream_get_contents(STDIN));
         }
 
-        $this->output->log('Importing SQL');
+        $this->output->write('Importing SQL');
 
         DatabaseLoader::load(
             $reader,
@@ -45,7 +45,7 @@ class ImportCommand extends Command
                 : null
         );
 
-        $this->output->log('Done');
+        $this->output->write('Done');
 
         return 0;
     }

@@ -25,7 +25,7 @@ class UpdateCommand extends Command
         $fetcher = CmsFetcher::factory($this->cli, $this->utils, $this->output);
         $fetcher->fetch(false, isset($args['with-installer']));
 
-        $this->output->log('Done');
+        $this->output->write('Done');
 
         return 0;
     }

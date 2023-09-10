@@ -39,12 +39,12 @@ class DumpCommand extends Command
         $dumper->setDumpTables(!isset($args['no-tables']));
         $dumper->setDumpData(!isset($args['no-data']));
 
-        $this->output->log('Dumping database');
+        $this->output->write('Dumping database');
 
         $tmpFile = $dumper->dump();
         $tmpFile->move($args['output-path']);
 
-        $this->output->log('Done');
+        $this->output->write('Done');
 
         return 0;
     }

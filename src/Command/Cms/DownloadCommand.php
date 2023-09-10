@@ -17,7 +17,7 @@ class DownloadCommand extends Command
         $fetcher = CmsFetcher::factory($this->cli, $this->utils, $this->output);
         $fetcher->fetch(true);
 
-        $this->output->log('Done');
+        $this->output->write('Done');
 
         return 0;
     }

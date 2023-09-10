@@ -34,8 +34,8 @@ class ActionCommand extends Command
 
         // list actions?
         if (!isset($args['action'])) {
-            $this->output->log('Listing actions for plugin "%s":', $args['plugin']);
-            $this->output->log('');
+            $this->output->write('Listing actions for plugin "%s":', $args['plugin']);
+            $this->output->write('');
 
             foreach ($plugin->getActions() as $name => $_) {
                 $this->output->write($name);
@@ -51,7 +51,7 @@ class ActionCommand extends Command
             or $this->cli->fail('Plugin action "%s" does not exist or is currently unavailable', $args['action']);
 
         // run
-        $this->output->log('Running plugin action %s', get_class($action));
+        $this->output->write('Running plugin action %s', get_class($action));
         $_POST['_plugin_action_confirmation'] = md5(get_class($action)); // fake action confirmation
         $result = $action->run();
 
@@ -60,11 +60,11 @@ class ActionCommand extends Command
                 $this->output->write($this->utils->renderMessage($message));
             }
         } elseif ($result->hasOutput()) {
-            $this->output->log('Plugin action has not returned any messages. Showing plaintext output below:');
-            $this->output->log('');
+            $this->output->write('Plugin action has not returned any messages. Showing plaintext output below:');
+            $this->output->write('');
             $this->output->write(trim($this->utils->htmlToPlaintext($result->getOutput())));
         } else {
-            $this->output->log('Plugin action has not returned any messages or output');
+            $this->output->write('Plugin action has not returned any messages or output');
         }
 
         if ($result->isComplete()) {

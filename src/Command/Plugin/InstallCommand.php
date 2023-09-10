@@ -34,7 +34,7 @@ class InstallCommand extends Command
             $tmpFile = Filesystem::createTmpFile();
             $path = $tmpFile->getPathname();
 
-            $this->output->log('Downloading %s', $args['from-url']);
+            $this->output->write('Downloading %s', $args['from-url']);
             $this->utils->downloadFile($args['from-url'], $path);
         } else {
             $this->cli->fail('Specify --from-path or --from-url');
@@ -45,15 +45,15 @@ class InstallCommand extends Command
         $plugins = $archive->extract($merge, $failedPlugins);
 
         foreach ($plugins as $plugin) {
-            $this->output->log('Added %s', $plugin);
+            $this->output->write('Added %s', $plugin);
         }
 
         foreach ($failedPlugins as $plugin) {
-            $this->output->log($merge ? 'Skipped %s' : 'Plugin %s already exists', $plugin);
+            $this->output->write($merge ? 'Skipped %s' : 'Plugin %s already exists', $plugin);
         }
 
         if (empty($plugins)) {
-            $this->output->log('No plugins added');
+            $this->output->write('No plugins added');
 
             return 1;
         }

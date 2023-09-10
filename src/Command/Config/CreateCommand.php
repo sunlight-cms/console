@@ -21,7 +21,7 @@ class CreateCommand extends Command
         $configTemplatePath = $this->cli->getProjectRoot() . '/system/config_template.php';
 
         if (is_file($configPath)) {
-            $this->output->log('The config.php file already exists');
+            $this->output->write('The config.php file already exists');
 
             return 0;
         }
@@ -35,7 +35,7 @@ class CreateCommand extends Command
         $config['secret'] = StringGenerator::generateString(64);
 
         $config->save();
-        $this->output->log('The config.php file has been created');
+        $this->output->write('The config.php file has been created');
 
         return 0;
     }

@@ -28,7 +28,7 @@ class BackupCommand extends Command
     {
         $this->utils->initCms($this->cli->getProjectRoot());
 
-        $this->output->log('Creating a backup');
+        $this->output->write('Creating a backup');
 
         $builder = new BackupBuilder();
         $builder->makeDynamicPathOptionalInFullBackup('plugins');
@@ -49,7 +49,7 @@ class BackupCommand extends Command
         $tmpFile = $builder->build();
         $tmpFile->move($args['output-path']);
 
-        $this->output->log('Done');
+        $this->output->write('Done');
 
         return 0;
     }

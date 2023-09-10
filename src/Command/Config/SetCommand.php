@@ -42,7 +42,7 @@ class SetCommand extends Command
         $configPath = $this->cli->getProjectRoot() . '/config.php';
 
         if (!is_file($configPath)) {
-            $this->output->log('The config.php file does not exist');
+            $this->output->write('The config.php file does not exist');
 
             return 1;
         }
@@ -96,7 +96,7 @@ class SetCommand extends Command
         }
 
         $config->save();
-        $this->output->log('Updated config.php');
+        $this->output->write('Updated config.php');
 
         return 0;
     }
