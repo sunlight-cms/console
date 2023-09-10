@@ -4,6 +4,7 @@ namespace SunlightConsole\Config;
 
 use Kuria\Options\Option;
 use SunlightConsole\Command;
+use SunlightConsole\JsonObject;
 
 class ProjectConfig extends ConfigObject
 {
@@ -19,9 +20,9 @@ class ProjectConfig extends ConfigObject
     /**
      * @return static
      */
-    static function loadFromComposerPackage(array $package): self
+    static function loadFromComposerJson(JsonObject $composerJson): self
     {
-        return self::load($package['extra'][self::COMPOSER_EXTRA_KEY] ?? []);
+        return self::load($composerJson['extra'][self::COMPOSER_EXTRA_KEY] ?? []);
     }
 
     protected static function getDefinition(): array

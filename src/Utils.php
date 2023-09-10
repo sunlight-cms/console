@@ -19,28 +19,6 @@ class Utils
         }
     }
 
-    function loadJsonFromFile(string $path): array
-    {
-        $data = @file_get_contents($path);
-
-        if ($data === false) {
-            throw new \Exception(sprintf('Could not load "%s"', $path));
-        }
-
-        $data = json_decode($data, true);
-
-        if ($data === null) {
-            throw new \Exception(sprintf('Could not parse JSON from "%s"', $path));
-        }
-
-        return $data;
-    }
-
-    function encodeJsonPretty($data): string
-    {
-        return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-    }
-
     function renderMessage(Message $message): string
     {
         switch ($message->getType()) {

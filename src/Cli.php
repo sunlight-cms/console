@@ -161,8 +161,8 @@ class Cli
         $composerJsonPath = $this->getProjectRoot() . '/composer.json';
 
         try {
-            return ProjectConfig::loadFromComposerPackage(
-                $this->utils->loadJsonFromFile($composerJsonPath)
+            return ProjectConfig::loadFromComposerJson(
+                JsonObject::fromFile($composerJsonPath)
             );
         } catch (ResolverException $e) {
             throw new \Exception(
@@ -219,7 +219,7 @@ class Cli
             return [];
         }
 
-        $packages = $this->utils->loadJsonFromFile($installedJsonPath);
+        $packages = JsonObject::fromFile($installedJsonPath);
         $packages = $packages['packages'] ?? $packages; // composer 1 vs 2
 
         $packageCommands = [];

@@ -41,7 +41,7 @@ class CmsFetcher
             $utils,
             $output,
             new CmsLocator(),
-            new ComposerJsonUpdater($utils, $output)
+            new ComposerJsonUpdater($cli, $output)
         );
     }
 
@@ -84,12 +84,11 @@ class CmsFetcher
             $this->output->log('No files written - maybe zip-paths-prefix is wrong?');
         }
         
-        $this->output->log('CMS version is %s', $result->version ?? 'unknown');
+        $this->output->log('CMS version is now %s', $result->version ?? 'unknown');
 
         // update composer.json
         $this->output->log('Updating composer.json');
-        $this->composerJsonUpdater->update(
-            $this->cli->getProjectRoot() . '/composer.json',
+        $this->composerJsonUpdater->updateAfterExtraction(
             $result,
             $archiveParams->isSemverMatched,
             $projectConfig->is_fresh_project
