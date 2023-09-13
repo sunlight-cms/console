@@ -2,8 +2,6 @@
 
 namespace SunlightConsole\DependencyInjection;
 
-use Psr\Container\ContainerExceptionInterface;
-
-class ContainerException extends \RuntimeException implements ContainerExceptionInterface
+class ContainerException extends \RuntimeException
 {
 }

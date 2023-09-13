@@ -12,8 +12,7 @@
         "php": ">=7.1",
         "composer/semver": "^3.3.2",
         "kuria/debug": "^4.0.1",
-        "kuria/options": "^2.1",
-        "psr/container": "^2.0"
+        "kuria/options": "^2.1"
     },
     "require-dev": {
         "sunlight-cms/sunlight-cms": "dev-master",

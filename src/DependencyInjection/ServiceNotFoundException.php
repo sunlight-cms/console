@@ -2,8 +2,6 @@
 
 namespace SunlightConsole\DependencyInjection;
 
-use Psr\Container\NotFoundExceptionInterface;
-
-class ServiceNotFoundException extends \OutOfBoundsException implements NotFoundExceptionInterface
+class ServiceNotFoundException extends \OutOfBoundsException
 {
 }

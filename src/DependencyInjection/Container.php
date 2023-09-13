@@ -2,9 +2,7 @@
 
 namespace SunlightConsole\DependencyInjection;
 
-use Psr\Container\ContainerInterface;
-
-class Container implements ContainerInterface
+class Container
 {
     /** @var array<string, object> service ID => instance */
     private $services = [];
