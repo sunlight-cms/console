@@ -244,5 +244,5 @@ It is possible to pass partial command names if it is not ambiguous.
 
 For example:
 
-- ``bin/console cl`` will run the ``clear-cache`` command
+- ``bin/console ca.cl`` will run the ``cache.clear`` command
 - ``bin/console pl.s devkit`` will run the ``plugin.show`` command
