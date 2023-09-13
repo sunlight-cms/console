@@ -51,7 +51,7 @@ class Extractor
     {
         $zip = new \ZipArchive();
 
-        if ($zip->open($archivePath, \ZipArchive::RDONLY) !== true) {
+        if ($zip->open($archivePath) !== true) {
             throw new \Exception(sprintf('Could not open "%s" as a ZIP archive', $archivePath));
         }
 
