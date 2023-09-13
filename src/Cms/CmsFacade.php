@@ -28,7 +28,7 @@ class CmsFacade
     function tryLoadCmsClasses(): bool
     {
         // include the project's autoloader only if the console is being used as standalone
-        if (!isset($_GLOBALS['_composer_autoload_path'])) {
+        if (!isset($GLOBALS['_composer_autoload_path'])) {
             require $this->project->getRoot() . '/vendor/autoload.php';
         }
 
