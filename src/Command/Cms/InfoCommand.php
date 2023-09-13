@@ -18,7 +18,7 @@ class InfoCommand extends Command
     function run(Project $project, CmsFacade $cms, array $args): int
     {
         // check if classes are available
-        if (!class_exists(Core::class)) {
+        if (!$cms->tryLoadCmsClasses()) {
             $this->output->write('Installed version: none');
 
             return 0;

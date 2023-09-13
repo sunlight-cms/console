@@ -18,9 +18,21 @@ class CmsFacade
 
     function ensureClassesAvailable(): void
     {
-        if (!class_exists(Core::class)) {
-            throw new \Exception('CMS classes are not available');
+        if (class_exists(Core::class) || $this->tryLoadCmsClasses()) {
+            return;
         }
+
+        throw new \Exception('CMS classes are not available');
+    }
+
+    function tryLoadCmsClasses(): bool
+    {
+        // include the project's autoloader only if the console is being used as standalone
+        if (!isset($_GLOBALS['_composer_autoload_path'])) {
+            require $this->project->getRoot() . '/vendor/autoload.php';
+        }
+
+        return class_exists(Core::class);
     }
 
     function init(array $options = []): void
@@ -33,7 +45,7 @@ class CmsFacade
 
         try {
             // set class loader
-            // (including autoload.php again just returns the existing autoloader instance)
+            // (including the same autoload.php again just returns the existing autoloader instance)
             Core::$classLoader = require $this->project->getRoot() . '/vendor/autoload.php';
 
             // init core
