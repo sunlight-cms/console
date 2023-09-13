@@ -150,11 +150,19 @@ Example:
 ::
 
   "commands": {
-      "example.foo": "Example\\FooCommand",
-      "example.bar": "Example\\BarCommand"
+      "example.foo": {
+          "class": "Example\\FooCommand"
+      },
+      "example.bar": {
+          "class": "Example\\BarCommand"
+      }
   }
 
 The command classes must extend ``SunlightConsole\Command``.
+
+.. NOTE::
+
+    See *src/Config/ServiceConfig.php* for a full list of supported options.
 
 
 Commands from other packages
@@ -203,25 +211,25 @@ about the available commands.)
 
 ::
 
-  cms.info               show information about the CMS
+  backup.create          create a backup
+  cache.clear            clear the cache
   cms.download           download CMS files
+  cms.info               show information about the CMS
   cms.patch              apply a patch to CMS files in the project
   config.create          create config.php with default contents
-  config.set             modify an option in config.php
   config.dump            dump config.php contents
-  plugin.list            list all plugins
-  plugin.show            show information about a plugin
-  plugin.install         install plugin from a ZIP file or an URL
-  plugin.action          perform a plugin action (or list actions if no action is given)
+  config.set             modify an option in config.php
   db.dump                dump database
   db.import              import a SQL dump
   db.query               execute a SQL query
-  log.search             search log entries
   log.monitor            continuously print out log entries
-  user.reset-password    reset password for the given user
-  backup                 create a backup
-  clear-cache            clear the cache
+  log.search             search log entries
+  plugin.action          perform a plugin action (or list actions if no action is given)
+  plugin.install         install plugin from a ZIP file or an URL
+  plugin.list            list all plugins
+  plugin.show            show information about a plugin
   project.dump-config    dump resolved project configuration
+  user.reset-password    reset password for the given user
   help                   show help
 
 .. TIP::
