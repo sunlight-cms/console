@@ -7,7 +7,7 @@ use SunlightConsole\DependencyInjection\ServiceDefinition;
 
 class ServiceConfig extends ConfigObject
 {
-    /** @var class-string */
+    /** @var class-string|null */
     public $class;
     /** @var callable|string|null */
     public $factory;
@@ -36,7 +36,7 @@ class ServiceConfig extends ConfigObject
     protected static function getDefinition(): array
     {
         return [
-            Option::string('class')->notEmpty(),
+            Option::string('class')->notEmpty()->default(null),
             Option::any('factory')->default(null),
             Option::array('args')->default([]),
             Option::nodeList(
