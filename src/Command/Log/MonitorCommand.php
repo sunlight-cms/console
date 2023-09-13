@@ -20,6 +20,13 @@ class MonitorCommand extends Command
     function defineArguments(): array
     {
         return [
+            ArgumentDefinition::option('level', 'only include messages at this level or more severe (example: notice)'),
+            ArgumentDefinition::option('category', 'include only this category (example: system)'),
+            ArgumentDefinition::option('keyword', 'string to match in message text (example: "Error")'),
+            ArgumentDefinition::option('method', 'http method to match (example: "POST")'),
+            ArgumentDefinition::option('url-keyword', 'string to match in request URL (example: "/admin/")'),
+            ArgumentDefinition::option('ip', 'IP address to match (example: "127.0.0.1")'),
+            ArgumentDefinition::option('user-id', 'user ID to match (example: 123)'),
             ArgumentDefinition::option('limit', 'initial maximum number of last messages shown (default: 10)'),
             ArgumentDefinition::option('load-limit', 'maximum number of new messaages to load in one query (default: 100)'),
             ArgumentDefinition::option('delay', 'number of seconds to wait before loading more messages (default: 5)', false),
@@ -28,7 +35,7 @@ class MonitorCommand extends Command
         ];
     }
 
-    function run(CmsFacade $cms, Formatter $formatter, array $args): int
+    function run(CmsFacade $cms, LogQueryFactory $queryFactory, Formatter $formatter, array $args): int
     {
         $limit = max(1, (int) ($args['limit'] ?? 10));
         $loadLimit = max(1, (int) ($args['load-limit'] ?? 100));
@@ -41,8 +48,21 @@ class MonitorCommand extends Command
         $isFirstQuery = true;
         $lastSeenEntryId = null;
 
+        $query = $queryFactory->createFromArgs([
+            'level' => $args['level'] ?? null,
+            'category' => $args['category'] ?? null,
+            'keyword' => $args['keyword'] ?? null,
+            'method' => $args['method'] ?? null,
+            'url-keyword' => $args['url-keyword'] ?? null,
+            'ip' => $args['ip'] ?? null,
+            'user-id' => $args['user-id'] ?? null,
+        ]);
+
+        $query->desc = true;
+
         while (true) {
-            $entries = $this->getEntriesSince($lastSeenEntryId, $isFirstQuery ? $limit : $loadLimit);
+            $query->limit = $isFirstQuery ? $limit : $loadLimit;
+            $entries = $this->getEntriesSince($query, $lastSeenEntryId);
 
             if ($newOnly && $isFirstQuery && !empty($entries)) {
                 // skip initial entries if --new-only is set
@@ -71,12 +91,9 @@ class MonitorCommand extends Command
     /**
      * @return LogEntry[]
      */
-    private function getEntriesSince($lastSeenEntryId, int $limit): array
+    private function getEntriesSince(LogQuery $query, $lastSeenEntryId): array
     {
-        $query = new LogQuery();
-        $query->limit = $limit;
         $query->offset = 0;
-
         $lastEntryFound = false;
         $entries = [];
 

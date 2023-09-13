@@ -2,7 +2,6 @@
 
 namespace SunlightConsole\Command\Log;
 
-use Sunlight\Log\LogQuery;
 use Sunlight\Logger;
 use SunlightConsole\Argument\ArgumentDefinition;
 use SunlightConsole\Cms\CmsFacade;
@@ -19,7 +18,7 @@ class SearchCommand extends Command
     function defineArguments(): array
     {
         return [
-            ArgumentDefinition::option('max-level', 'only include messages at this level or more severe (example: notice)'),
+            ArgumentDefinition::option('level', 'only include messages at this level or more severe (example: notice)'),
             ArgumentDefinition::option('category', 'include only this category (example: system)'),
             ArgumentDefinition::option('since', 'strtotime-compatible lower time bound (example: "this monday")'),
             ArgumentDefinition::option('until', 'strtotime-compatible upper time bound (example: "1 hour ago")'),
@@ -34,11 +33,11 @@ class SearchCommand extends Command
         ];
     }
 
-    function run(CmsFacade $cms, Formatter $formatter, array $args): int
+    function run(CmsFacade $cms, LogQueryFactory $queryFactory, Formatter $formatter, array $args): int
     {
         $cms->init();
 
-        $query = $this->createQuery($args);
+        $query = $queryFactory->createFromArgs($args);
         $entries = Logger::search($query);
 
         if (empty($entries)) {
@@ -52,83 +51,5 @@ class SearchCommand extends Command
         }
 
         return 0;
-    }
-
-    private function createQuery(array $args): LogQuery
-    {
-        $query = new LogQuery();
-
-        // map string options
-        $stringOptionMap = [
-            'category' => 'category',
-            'keyword' => 'keyword',
-            'method' => 'method',
-            'url-keyword' => 'urlKeyword',
-            'ip' => 'ip',
-        ];
-
-        foreach ($stringOptionMap as $option => $prop) {
-            if (isset($args[$option])) {
-                $query->{$prop} = $args[$option];
-            }
-        }
-
-        // map numeric options
-        $numericOptionMap = [
-            'user-id' => 'userId',
-            'offset' => 'offset',
-            'limit' => 'limit',
-        ];
-
-        foreach ($numericOptionMap as $option => $prop) {
-            if (isset($args[$option])) {
-                ctype_digit($args[$option])
-                    or $this->output->fail('Invalid --%s, a number is required', $option);
-
-                $query->{$prop} = (int) $args[$option];
-            }
-        }
-
-        // max-level
-        if (isset($args['max-level'])) {
-            if (ctype_digit($args['max-level'])) {
-                $maxLevel = (int) $args['max-level'];
-
-                isset(Logger::LEVEL_NAMES[$maxLevel])
-                    or $this->output->fail('Invalid --max-level, valid levels are %d to %d', Logger::EMERGENCY, Logger::DEBUG);
-            } else {
-                $maxLevel = array_search($args['max-level'], Logger::LEVEL_NAMES, true);
-
-                $maxLevel !== false
-                    or $this->output->fail('Invalid --max-level, valid names are: %s', implode(', ', Logger::LEVEL_NAMES));
-            }
-
-            $query->maxLevel = $maxLevel;
-        }
-
-        // since
-        if (isset($args['since'])) {
-            $since = strtotime($args['since']);
-
-            $since !== false
-                or $this->output->fail('Could not convert --since value to a timestamp');
-
-            $query->since = $since;
-        }
-
-        // until
-        if (isset($args['until'])) {
-            $until = strtotime($args['until']);
-
-            $until !== false
-                or $this->output->fail('Could not convert --until value to a timestamp');
-
-            $query->until = $until;
-        }
-
-        // desc
-        $query->desc = isset($args['desc']);
-
-        return $query;
     }
 }

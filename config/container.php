@@ -88,6 +88,8 @@ $container->define(
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'log.monitor']),
 
+    Def::service(Command\Log\LogQueryFactory::class),
+
     // plugin
     Def::service(Command\Plugin\ListCommand::class)
         ->extend(Command::class)
