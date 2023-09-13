@@ -3,6 +3,7 @@
 namespace SunlightConsole\Cms;
 
 use Sunlight\Core;
+use Sunlight\Database\Database;
 use Sunlight\Plugin\Plugin;
 use SunlightConsole\Project;
 
@@ -58,6 +59,26 @@ class CmsFacade
                 $e->getLine()
             ), 0, $e);
         }
+    }
+
+    function initMinimalWithDatabase(): void
+    {
+        $this->init(['minimal_mode' => true]);
+
+        $config = @include $this->project->getRoot() . '/config.php';
+
+        if ($config === false) {
+            throw new \Exception('Cannot connect to database - no config.php');
+        }
+
+        Database::connect(
+            $config['db.server'],
+            $config['db.user'],
+            $config['db.password'],
+            $config['db.name'],
+            $config['db.port'],
+            $config['db.prefix']
+        );
     }
 
     function findPlugin(string $name): ?Plugin

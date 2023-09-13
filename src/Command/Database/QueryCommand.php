@@ -28,7 +28,7 @@ class QueryCommand extends Command
     function run(CmsFacade $cms, Formatter $formatter, array $args): int
     {
         $json = isset($args['json']);
-        $cms->init();
+        $cms->initMinimalWithDatabase();
 
         try {
             $result = DB::query($args['sql']);

@@ -20,13 +20,14 @@ class ImportCommand extends Command
     {
         return [
             ArgumentDefinition::option('prefix', 'prefix used in the SQL dump to replace with current prefix'),
+            ArgumentDefinition::flag('drop-all-system-tables', 'drop ALL existing system tables before importing'),
             ArgumentDefinition::argument(0, 'sql-path', 'path to a SQL file (otherwise reads from STDIN)'),
         ];
     }
 
     function run(CmsFacade $cms, array $args): int
     {
-        $cms->init();
+        $cms->initMinimalWithDatabase();
 
         $this->output->write('Reading SQL');
 
@@ -34,6 +35,11 @@ class ImportCommand extends Command
             $reader = SqlReader::fromFile($args['sql-path']);
         } else {
             $reader = new SqlReader(stream_get_contents(STDIN));
+        }
+
+        if (isset($args['drop-all-system-tables'])) {
+            $this->output->write('Dropping tables');
+            DatabaseLoader::dropTables(DB::getTablesByPrefix());
         }
 
         $this->output->write('Importing SQL');

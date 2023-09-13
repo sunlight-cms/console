@@ -27,7 +27,7 @@ class DumpCommand extends Command
 
     function run(CmsFacade $cms, array $args): int
     {
-        $cms->init();
+        $cms->initMinimalWithDatabase();
 
         if (isset($args['tables'])) {
             $tables = explode(',', $args['tables']);
