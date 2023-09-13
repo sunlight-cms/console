@@ -12,10 +12,14 @@ class Formatter
     function message(Message $message): string
     {
         switch ($message->getType()) {
-            case Message::OK: $symbol = '🟢'; break;
-            case Message::WARNING: $symbol = '🟡'; break;
-            case Message::ERROR: $symbol = '🔴'; break;
-            default: $symbol = '⚪'; break;
+            case Message::OK: $symbol = '🟢';
+                break;
+            case Message::WARNING: $symbol = '🟡';
+                break;
+            case Message::ERROR: $symbol = '🔴';
+                break;
+            default: $symbol = '⚪';
+                break;
         }
 
         return sprintf(

@@ -2,8 +2,8 @@
 
 namespace SunlightConsole\Command\Plugin;
 
-use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
@@ -19,7 +19,7 @@ class ShowCommand extends Command
         return [
             ArgumentDefinition::flag('object', 'dump the plugin object'),
             ArgumentDefinition::flag('options', 'dump the plugin options'),
-            ArgumentDefinition::argument(0, 'plugin', 'plugin name or ID',  true),
+            ArgumentDefinition::argument(0, 'plugin', 'plugin name or ID', true),
         ];
     }
 
@@ -43,8 +43,8 @@ class ShowCommand extends Command
             $this->output->write('Implementation: %s', get_class($plugin));
             $this->output->write('Status: %s', $plugin->getStatus());
             $this->output->write('Errors: %d', count($plugin->getErrors()));
-            
-            foreach ($plugin->getErrors() as $error) {                
+
+            foreach ($plugin->getErrors() as $error) {
                 $this->output->write('    %s', $error);
             }
         }

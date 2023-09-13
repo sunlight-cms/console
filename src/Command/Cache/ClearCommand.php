@@ -2,10 +2,10 @@
 
 namespace SunlightConsole\Command\Cache;
 
-use SunlightConsole\Command;
-use SunlightConsole\Argument\ArgumentDefinition;
-use Sunlight\Core;
 use Sunlight\Composer\ComposerBridge;
+use Sunlight\Core;
+use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 
 class ClearCommand extends Command

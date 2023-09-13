@@ -62,11 +62,11 @@ abstract class ConfigObject
     {
         foreach ($array as $key => $value) {
             $prop = str_replace('-', '_', $key);
-            
+
             if (!property_exists($this, $prop)) {
                 throw new \Exception(sprintf(
-                    'Property $%s does not exist on %s (from array key "%s")', 
-                    $prop, 
+                    'Property $%s does not exist on %s (from array key "%s")',
+                    $prop,
                     static::class,
                     $key
                 ));

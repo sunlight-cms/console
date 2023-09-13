@@ -52,7 +52,7 @@ class CmsFetcher
 
         // download
         $tempPath = tempnam(sys_get_temp_dir(), 'slcms')
-            or $this->output->fail('Could not create a temporary file'); 
+            or $this->output->fail('Could not create a temporary file');
 
         try {
             $this->fileDownloader->download($archiveParams->url, $tempPath);
@@ -70,7 +70,7 @@ class CmsFetcher
         } else {
             $this->output->log('No files written - maybe zip-paths-prefix is wrong?');
         }
-        
+
         $this->output->log('CMS version is now %s', $result->version ?? 'unknown');
 
         // update composer.json

@@ -30,7 +30,7 @@ class Container implements ContainerInterface
 
     /**
      * Get service object
-     * 
+     *
      * @template T
      * @param class-string<T>|string $id
      * @throws ContainerException on failure
@@ -44,7 +44,7 @@ class Container implements ContainerInterface
 
     /**
      * Get tagged service IDs
-     * 
+     *
      * @return array<string, mixed> service ID => value
      */
     function getTagged(string $tag): array
@@ -54,7 +54,7 @@ class Container implements ContainerInterface
 
     /**
      * Define a service object directly
-     * 
+     *
      * @param object $service
      */
     function set(string $id, $service): void
@@ -80,7 +80,7 @@ class Container implements ContainerInterface
 
     /**
      * Call the given callback with autowired arguments
-     * 
+     *
      * @param callable $callback
      * @throws ContainerException on failure
      */
@@ -91,7 +91,7 @@ class Container implements ContainerInterface
 
     /**
      * Resolve the given arguments using autowiring
-     * 
+     *
      * @param callable $callback
      * @throws ContainerException on failure
      * @return list<mixed>
@@ -135,43 +135,43 @@ class Container implements ContainerInterface
                 if (isset($def->factory)) {
                     $callback = $this->resolveCallback($def->factory);
                     $args = $this->resolveArgs(new \ReflectionFunction($callback), $def->args, $context, $def->autowire);
-    
+
                     $service = $callback(...$args);
                 } else {
                     /** @var class-string */
                     $class = $def->class ?? $id;
-    
+
                     if (method_exists($class, '__construct')) {
                         $args = $this->resolveArgs(new \ReflectionMethod($class, '__construct'), $def->args, [], $def->autowire);
                     } else {
                         if (!empty($def->args)) {
                             throw new ContainerException('Cannot pass arguments to a class without a constructor');
                         }
-        
+
                         $args = [];
                     }
-        
+
                     $service = new $class(...$args);
                 }
             } catch (\Throwable $e) {
                 throw new ContainerException(sprintf('Error while instantiating service "%s": %s', $id, $e->getMessage()), 0, $e);
             }
-    
+
             foreach ($def->calls as $call) {
                 try {
                     $args = $this->resolveArgs(new \ReflectionMethod($service, $call['method']), $call['args'], $context, $def->autowire);
-    
+
                     $service->{$call['method']}(...$args);
                 } catch (\Throwable $e) {
                     throw new ContainerException(sprintf('Error while calling %s(#%d) on service "%s"', $call['method'], count($call['args']), $id));
                 }
             }
-    
+
             foreach ($def->initializers as $index => $init) {
                 try {
                     $callback = $this->resolveCallback($init['callback']);
                     $args = $this->resolveArgs(new \ReflectionFunction($callback), $init['args'], $context, $def->autowire, true, 1);
-    
+
                     $callback($service, ...$args);
                 } catch (\Throwable $e) {
                     throw new ContainerException(sprintf(
@@ -280,7 +280,7 @@ class Container implements ContainerInterface
                     $resolved[] = $context[$class];
                     continue;
                 }
-                
+
                 // autowiring
                 if ($autowire) {
                     if ($this->has($class)) {
@@ -291,7 +291,7 @@ class Container implements ContainerInterface
                     }
                 }
             }
-            
+
             // missing argument
             if ($params[$i]->isOptional()) {
                 break;

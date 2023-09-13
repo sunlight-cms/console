@@ -2,9 +2,9 @@
 
 namespace SunlightConsole\Command\Backup;
 
-use SunlightConsole\Command;
-use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Backup\BackupBuilder;
+use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 
 class CreateCommand extends Command
@@ -34,7 +34,7 @@ class CreateCommand extends Command
         $builder = new BackupBuilder();
         $builder->makeDynamicPathOptionalInFullBackup('plugins');
         $builder->setDatabaseDumpEnabled(isset($args['database']));
-        
+
         if (!isset($args['plugins'])) {
             $builder->disableDynamicPath('plugins');
         }

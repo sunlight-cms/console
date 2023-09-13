@@ -29,7 +29,7 @@ class Output
 
     /**
      * Fail with an error message
-     * 
+     *
      * @psalm-return never
      * @throws \Exception
      */

@@ -2,10 +2,10 @@
 
 namespace SunlightConsole\Command\Config;
 
-use SunlightConsole\Command;
-use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Util\ConfigurationFile;
 use Sunlight\Util\StringGenerator;
+use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Project;
 use SunlightConsole\Util\CmsFacade;
 
@@ -60,29 +60,29 @@ class SetCommand extends Command
                     $config[$key] = !empty($value) && $value !== 'false';
                     break;
 
-                // ?int
+                    // ?int
                 case 'db.port':
                     $config[$key] = !empty($value) && $value !== 'null' ? (int) $value : null;
                     break;
 
-                // ?string
+                    // ?string
                 case 'fallback_base_url':
                 case 'timezone':
                     $config[$key] = !empty($value) && $value !== 'null' ? $value : null;
                     break;
 
-                // secret
+                    // secret
                 case 'secret':
                     $config[$key] = !empty($value) ? $value : StringGenerator::generateString(64);
                     break;
 
-                // trusted_proxies
+                    // trusted_proxies
                 case 'trusted_proxies':
                     $value = preg_split('{\s*+,\s*+}', $value);
                     $config[$key] = !empty($value) ? $value : null;
                     break;
 
-                // trusted_proxy_headers
+                    // trusted_proxy_headers
                 case 'trusted_proxy_headers':
                     in_array($value, ['forwarded', 'x-forwarded', 'all', 'null', ''], true)
                         or $this->output->fail('Invalid trusted_proxy_headers value');
@@ -91,7 +91,7 @@ class SetCommand extends Command
 
                     break;
 
-                // string
+                    // string
                 default:
                     $config[$key] = $value;
             }

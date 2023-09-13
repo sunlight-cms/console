@@ -2,8 +2,8 @@
 
 namespace SunlightConsole\Command\Plugin;
 
-use SunlightConsole\Command;
 use Sunlight\Core;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\StringHelper;
 
@@ -17,7 +17,7 @@ class ListCommand extends Command
     function run(CmsFacade $cms, StringHelper $stringHelper, array $args): int
     {
         $cms->init();
-        
+
         $plugins = Core::$pluginManager->getPlugins();
         $allPlugins = $plugins->map + $plugins->inactiveMap;
         $pluginNamePadding = $stringHelper->getMaxStringLength(array_keys($allPlugins));

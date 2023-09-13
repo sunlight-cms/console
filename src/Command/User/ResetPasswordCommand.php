@@ -2,11 +2,11 @@
 
 namespace SunlightConsole\Command\User;
 
-use SunlightConsole\Command;
-use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Util\Password;
 use Sunlight\Util\StringGenerator;
+use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 
 class ResetPasswordCommand extends Command

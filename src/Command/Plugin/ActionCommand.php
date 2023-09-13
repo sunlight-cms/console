@@ -2,9 +2,9 @@
 
 namespace SunlightConsole\Command\Plugin;
 
-use SunlightConsole\Command;
-use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Core;
+use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
@@ -26,7 +26,7 @@ class ActionCommand extends Command
     function run(CmsFacade $cms, Formatter $formatter, array $args): int
     {
         $cms->init(['env' => Core::ENV_ADMIN]);
-        
+
         // get plugin
         $plugin = $cms->findPlugin($args['plugin']);
 

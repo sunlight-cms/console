@@ -65,7 +65,7 @@ class Project
         } catch (ResolverException $e) {
             throw new \Exception(
                 sprintf(
-                    "Invalid extra[%s] configuration in \"%s\"", 
+                    "Invalid extra[%s] configuration in \"%s\"",
                     ProjectConfig::COMPOSER_EXTRA_KEY,
                     $this->getComposerJsonPath()
                 ),

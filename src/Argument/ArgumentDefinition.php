@@ -76,7 +76,7 @@ class ArgumentDefinition
                 . (!$this->required ? ']' : '');
         }
 
-        
+
         return $this->required ? "<{$this->name}>" : "[{$this->name}]";
     }
 }

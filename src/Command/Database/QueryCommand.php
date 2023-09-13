@@ -2,11 +2,11 @@
 
 namespace SunlightConsole\Command\Database;
 
-use SunlightConsole\Command;
-use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Database\DatabaseException;
 use Sunlight\Util\Json;
+use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
@@ -45,7 +45,7 @@ class QueryCommand extends Command
         if ($result instanceof \mysqli_result) {
             if ($json) {
                 $this->output->write('[');
-                
+
                 for ($i = 1, $total = DB::size($result); $i <= $total; ++$i) {
                     $this->output->write('    %s%s', Json::encode(DB::row($result)), $i < $total ? ',' : '');
                 }

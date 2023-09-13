@@ -31,7 +31,7 @@ class CmsFacade
             throw new \Exception('Core is already initialized');
         }
 
-        try {            
+        try {
             // set class loader
             // (including autoload.php again just returns the existing autoloader instance)
             Core::$classLoader = require $this->project->getRoot() . '/vendor/autoload.php';
@@ -41,9 +41,9 @@ class CmsFacade
         } catch (\Throwable $e) {
             throw new \Exception(sprintf(
                 'Could not initialize CMS: %s in %s:%d',
-                 $e->getMessage(),
-                 $e->getFile(),
-                 $e->getLine()
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
             ), 0, $e);
         }
     }

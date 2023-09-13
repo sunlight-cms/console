@@ -2,9 +2,9 @@
 
 namespace SunlightConsole\Command\Config;
 
-use SunlightConsole\Command;
 use Sunlight\Util\ConfigurationFile;
 use Sunlight\Util\StringGenerator;
+use SunlightConsole\Command;
 use SunlightConsole\Project;
 use SunlightConsole\Util\CmsFacade;
 

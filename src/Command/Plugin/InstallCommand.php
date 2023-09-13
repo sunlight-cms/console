@@ -2,11 +2,11 @@
 
 namespace SunlightConsole\Command\Plugin;
 
-use SunlightConsole\Command;
-use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Core;
 use Sunlight\Plugin\PluginArchive;
 use Sunlight\Util\Filesystem;
+use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Command;
 use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\FileDownloader;
 
@@ -29,7 +29,7 @@ class InstallCommand extends Command
     function run(CmsFacade $cms, FileDownloader $fileDownloader, array $args): int
     {
         $cms->init();
-        
+
         if (isset($args['from-path'])) {
             $path = $args['from-path'];
         } elseif (isset($args['from-url'])) {

@@ -2,9 +2,9 @@
 
 namespace SunlightConsole\Command;
 
-use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use SunlightConsole\Cli;
+use SunlightConsole\Command;
 use SunlightConsole\Util\StringHelper;
 
 class HelpCommand extends Command
@@ -81,9 +81,9 @@ class HelpCommand extends Command
         $this->output->write('');
         $this->output->write(
             'Usage: %s %s%s',
-             $_SERVER['PHP_SELF'] ?? 'console',
-             $command->getName(),
-             !empty($formattedArgs) ? ' ' . implode(' ', $formattedArgs) : ''
+            $_SERVER['PHP_SELF'] ?? 'console',
+            $command->getName(),
+            !empty($formattedArgs) ? ' ' . implode(' ', $formattedArgs) : ''
         );
         $this->output->write('');
         $this->printCommandArgs($command->getArguments(), '');
@@ -110,7 +110,7 @@ class HelpCommand extends Command
             $formattedArgName = $arg->format();
 
             $this->output->write(
-                '%s    %s%s    %s', 
+                '%s    %s%s    %s',
                 $padding,
                 $formattedArgName,
                 str_repeat(' ', $argNamePadding - strlen($formattedArgName)),

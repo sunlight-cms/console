@@ -13,7 +13,7 @@ class CmsLocator
         $params = new CmsArchiveParams();
         $params->pathsPrefix = $cmsConfig->archive->zip_paths_prefix;
         $params->isSemverMatched = false;
-        
+
         // prepare params
         if ($cmsConfig->archive->zip_url !== null) {
             $params->version = $cmsConfig->version;
@@ -21,7 +21,7 @@ class CmsLocator
         } else {
             $this->locateFromGit($params, $cmsConfig->archive, $cmsConfig->version);
         }
-        
+
         // replace version placeholders
         $params->url = $this->replaceVersionPlaceholder($params->url, $params->version);
         $params->pathsPrefix = $this->replaceVersionPlaceholder($params->pathsPrefix, $params->version);
@@ -50,8 +50,8 @@ class CmsLocator
                 $params->version = $version;
             } else {
                 // try to match a constraint against existing tags
-                $params->version = $this->getLatestVersionFromGitTags($archiveConfig, $version); 
-                $params->isSemverMatched = true;               
+                $params->version = $this->getLatestVersionFromGitTags($archiveConfig, $version);
+                $params->isSemverMatched = true;
             }
 
             $params->url = $archiveConfig->git_tag_zip_url;

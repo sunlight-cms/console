@@ -37,7 +37,7 @@ class MonitorCommand extends Command
         $bell = isset($args['bell']);
 
         $cms->init();
-        
+
         $isFirstQuery = true;
         $lastSeenEntryId = null;
 

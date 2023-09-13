@@ -28,7 +28,7 @@ class DumpCommand extends Command
         }
 
         $config = new ConfigurationFile($configPath);
-        
+
         $this->output->write($formatter->dump($config->toArray()));
 
         return 0;

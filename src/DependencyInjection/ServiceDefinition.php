@@ -82,9 +82,9 @@ class ServiceDefinition
         return $this;
     }
 
-   /**
-     * @return $this
-     */
+    /**
+      * @return $this
+      */
     function init(string $callback, ...$args): self
     {
         $this->initializers[] = ['callback' => $callback, 'args' => $args];

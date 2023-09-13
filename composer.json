@@ -17,7 +17,8 @@
     },
     "require-dev": {
         "sunlight-cms/sunlight-cms": "dev-master",
-        "vimeo/psalm": "^5.15"
+        "vimeo/psalm": "^5.15",
+        "friendsofphp/php-cs-fixer": "^3.26"
     },
     "autoload": {
         "psr-4": {
@@ -26,5 +27,13 @@
     },
     "bin": [
         "bin/console"
-    ]
+    ],
+    "scripts": {
+        "cs": [
+            "psalm",
+            "php-cs-fixer fix --dry-run --diff -v"
+        ],
+        "cs.fix": "php-cs-fixer fix",
+        "psalm": "psalm --no-suggestions"
+    }
 }
