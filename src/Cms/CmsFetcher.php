@@ -27,7 +27,7 @@ class CmsFetcher
         Output $output,
         Locator $locator,
         ComposerJsonUpdater $composerJsonUpdater,
-        FileDownloader $fileDownloader,
+        FileDownloader $fileDownloader
     ) {
         $this->project = $project;
         $this->output = $output;
