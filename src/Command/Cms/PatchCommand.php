@@ -41,8 +41,6 @@ class PatchCommand extends Command
         } elseif (isset($args['from-url'])) {
             $tmpFile = Filesystem::createTmpFile();
             $path = $tmpFile->getPathname();
-
-            $this->output->write('Downloading %s', $args['from-url']);
             $fileDownloader->download($args['from-url'], $path);
         } else {
             $this->output->fail('Specify --from-path or --from-url');
