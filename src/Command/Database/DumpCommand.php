@@ -5,8 +5,8 @@ namespace SunlightConsole\Command\Database;
 use Sunlight\Database\Database as DB;
 use Sunlight\Database\SqlDumper;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 
 class DumpCommand extends Command
 {

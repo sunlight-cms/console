@@ -2,6 +2,7 @@
 
 namespace SunlightConsole\Cms;
 
+use SunlightConsole\Cms\Archive\ExtractionResult;
 use SunlightConsole\Config\ProjectConfig;
 use SunlightConsole\JsonObject;
 use SunlightConsole\Output;
@@ -34,7 +35,7 @@ class ComposerJsonUpdater
     }
 
     function updateAfterExtraction(
-        CmsExtractionResult $extractionResult,
+        ExtractionResult $extractionResult,
         bool $archiveIsSemverMatched,
         bool $isFreshProject
     ): void {

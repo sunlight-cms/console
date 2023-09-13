@@ -6,8 +6,8 @@ use Sunlight\Core;
 use Sunlight\Plugin\PluginArchive;
 use Sunlight\Util\Filesystem;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\FileDownloader;
 
 class InstallCommand extends Command

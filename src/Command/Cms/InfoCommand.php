@@ -4,9 +4,9 @@ namespace SunlightConsole\Command\Cms;
 
 use Sunlight\Core;
 use Sunlight\VersionChecker;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
 use SunlightConsole\Project;
-use SunlightConsole\Util\CmsFacade;
 
 class InfoCommand extends Command
 {

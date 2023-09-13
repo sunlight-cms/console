@@ -3,9 +3,9 @@
 namespace SunlightConsole\Command\Config;
 
 use Sunlight\Util\ConfigurationFile;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
 use SunlightConsole\Project;
-use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
 class DumpCommand extends Command

@@ -3,8 +3,8 @@
 namespace SunlightConsole\Command\Plugin;
 
 use Sunlight\Core;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\StringHelper;
 
 class ListCommand extends Command

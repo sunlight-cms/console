@@ -12,6 +12,7 @@
     <projectFiles>
         <directory name="src" />
         <file name="bin/console" />
+        <file name="config/container.php" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>

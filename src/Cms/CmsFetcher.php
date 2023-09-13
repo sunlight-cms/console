@@ -2,6 +2,8 @@
 
 namespace SunlightConsole\Cms;
 
+use SunlightConsole\Cms\Archive\Extractor;
+use SunlightConsole\Cms\Archive\Locator;
 use SunlightConsole\Config\Project\CmsConfig;
 use SunlightConsole\Output;
 use SunlightConsole\Project;
@@ -13,7 +15,7 @@ class CmsFetcher
     private $project;
     /** @var Output */
     private $output;
-    /** @var CmsLocator */
+    /** @var Locator */
     private $locator;
     /** @var ComposerJsonUpdater */
     private $composerJsonUpdater;
@@ -23,7 +25,7 @@ class CmsFetcher
     function __construct(
         Project $project,
         Output $output,
-        CmsLocator $locator,
+        Locator $locator,
         ComposerJsonUpdater $composerJsonUpdater,
         FileDownloader $fileDownloader,
     ) {
@@ -82,9 +84,9 @@ class CmsFetcher
         );
     }
 
-    private function createExtractor(CmsConfig $cmsConfig, bool $forceInstaller): CmsExtractor
+    private function createExtractor(CmsConfig $cmsConfig, bool $forceInstaller): Extractor
     {
-        $extractor = new CmsExtractor($this->project->getRoot());
+        $extractor = new Extractor($this->project->getRoot());
 
         if ($forceInstaller || $cmsConfig->installer && !$extractor->filesAlreadyExist()) {
             $extractor->addInstaller();

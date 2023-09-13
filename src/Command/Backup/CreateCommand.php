@@ -4,8 +4,8 @@ namespace SunlightConsole\Command\Backup;
 
 use Sunlight\Backup\BackupBuilder;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 
 class CreateCommand extends Command
 {

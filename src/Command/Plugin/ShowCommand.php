@@ -3,8 +3,8 @@
 namespace SunlightConsole\Command\Plugin;
 
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
 class ShowCommand extends Command

@@ -4,8 +4,8 @@ namespace SunlightConsole\Command\Plugin;
 
 use Sunlight\Core;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
 class ActionCommand extends Command

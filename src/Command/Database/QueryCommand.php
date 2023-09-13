@@ -6,8 +6,8 @@ use Sunlight\Database\Database as DB;
 use Sunlight\Database\DatabaseException;
 use Sunlight\Util\Json;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
 class QueryCommand extends Command

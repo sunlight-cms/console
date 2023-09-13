@@ -16,12 +16,12 @@ $container->define(
     Def::service(Project::class),
 
     // cms services
+    Def::service(Cms\Archive\Locator::class),
+    Def::service(Cms\CmsFacade::class),
     Def::service(Cms\CmsFetcher::class),
-    Def::service(Cms\CmsLocator::class),
     Def::service(Cms\ComposerJsonUpdater::class),
 
     // utils
-    Def::service(Util\CmsFacade::class),
     Def::service(Util\FileDownloader::class),
     Def::service(Util\Formatter::class),
     Def::service(Util\StringHelper::class),
@@ -39,29 +39,29 @@ $container->define(
     Def::service(Command\Backup\CreateCommand::class)
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'backup.create']),
-    
+
     // cms
     Def::service(Command\Cms\InfoCommand::class)
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'cms.info']),
-    
+
     Def::service(Command\Cms\DownloadCommand::class)
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'cms.download']),
-    
+
     Def::service(Command\Cms\PatchCommand::class)
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'cms.patch']),
-    
+
     // config
     Def::service(Command\Config\CreateCommand::class)
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'config.create']),
-    
+
     Def::service(Command\Config\SetCommand::class)
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'config.set']),
-    
+
     Def::service(Command\Config\DumpCommand::class)
         ->extend(Command::class)
         ->tag('console.command', ['name' => 'config.dump']),

@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace SunlightConsole\Cms;
+namespace SunlightConsole\Cms\Archive;
 
 use Composer\Semver\Semver;
 use SunlightConsole\Config\Project\Cms\ArchiveConfig;
 use SunlightConsole\Config\Project\CmsConfig;
 
-class CmsLocator
+class Locator
 {
-    function locate(CmsConfig $cmsConfig): CmsArchiveParams
+    function locate(CmsConfig $cmsConfig): ArchiveParams
     {
-        $params = new CmsArchiveParams();
+        $params = new ArchiveParams();
         $params->pathsPrefix = $cmsConfig->archive->zip_paths_prefix;
         $params->isSemverMatched = false;
 
@@ -29,7 +29,7 @@ class CmsLocator
         return $params;
     }
 
-    private function locateFromGit(CmsArchiveParams $params, ArchiveConfig $archiveConfig, string $version): void
+    private function locateFromGit(ArchiveParams $params, ArchiveConfig $archiveConfig, string $version): void
     {
         if (strncmp('dev-', $version, 4) === 0) {
             // use a branch

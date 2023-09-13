@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace SunlightConsole\Cms;
+namespace SunlightConsole\Cms\Archive;
 
-class CmsExtractor
+class Extractor
 {
     /** @var string */
     private $targetDir;
@@ -47,7 +47,7 @@ class CmsExtractor
         return true;
     }
 
-    function extract(string $archivePath, string $archivePathsPrefix): CmsExtractionResult
+    function extract(string $archivePath, string $archivePathsPrefix): ExtractionResult
     {
         $zip = new \ZipArchive();
 
@@ -55,7 +55,7 @@ class CmsExtractor
             throw new \Exception(sprintf('Could not open "%s" as a ZIP archive', $archivePath));
         }
 
-        $result = new CmsExtractionResult();
+        $result = new ExtractionResult();
         $prefixLen = strlen($archivePathsPrefix);
         $purgedDirMap = [];
 

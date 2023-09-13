@@ -4,9 +4,9 @@ namespace SunlightConsole\Command\Config;
 
 use Sunlight\Util\ConfigurationFile;
 use Sunlight\Util\StringGenerator;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
 use SunlightConsole\Project;
-use SunlightConsole\Util\CmsFacade;
 
 class CreateCommand extends Command
 {

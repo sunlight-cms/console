@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace SunlightConsole\Util;
+namespace SunlightConsole\Cms;
 
 use Sunlight\Core;
 use Sunlight\Plugin\Plugin;

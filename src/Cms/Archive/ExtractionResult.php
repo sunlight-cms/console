@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace SunlightConsole\Cms;
+namespace SunlightConsole\Cms\Archive;
 
-class CmsExtractionResult
+class ExtractionResult
 {
     /** @var string|null */
     public $version;

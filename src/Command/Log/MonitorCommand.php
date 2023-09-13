@@ -6,8 +6,8 @@ use Sunlight\Log\LogEntry;
 use Sunlight\Log\LogQuery;
 use Sunlight\Logger;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Command;
-use SunlightConsole\Util\CmsFacade;
 use SunlightConsole\Util\Formatter;
 
 class MonitorCommand extends Command

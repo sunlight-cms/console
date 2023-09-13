@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in('bin')
+    ->in('bin')->name('console')
+    ->in('config')->name('container.php')
     ->in('src');
 
 $config = new PhpCsFixer\Config();
@@ -14,6 +15,7 @@ return $config->setRules([
         'no_unused_imports' => true,
         'visibility_required' => false,
         'blank_line_after_opening_tag' => false,
+        'method_argument_space' => ['on_multiline' => 'ignore'],
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);
