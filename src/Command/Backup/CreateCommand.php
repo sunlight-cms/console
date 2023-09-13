@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace SunlightConsole\Command;
+namespace SunlightConsole\Command\Backup;
 
 use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Backup\BackupBuilder;
+use SunlightConsole\Util\CmsFacade;
 
-class BackupCommand extends Command
+class CreateCommand extends Command
 {
     function getHelp(): string
     {
@@ -24,9 +25,9 @@ class BackupCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
 
         $this->output->write('Creating a backup');
 

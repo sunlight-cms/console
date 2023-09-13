@@ -7,6 +7,8 @@ use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Core;
 use Sunlight\Plugin\PluginArchive;
 use Sunlight\Util\Filesystem;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\FileDownloader;
 
 class InstallCommand extends Command
 {
@@ -24,9 +26,9 @@ class InstallCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, FileDownloader $fileDownloader, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
         
         if (isset($args['from-path'])) {
             $path = $args['from-path'];
@@ -34,10 +36,9 @@ class InstallCommand extends Command
             $tmpFile = Filesystem::createTmpFile();
             $path = $tmpFile->getPathname();
 
-            $this->output->write('Downloading %s', $args['from-url']);
-            $this->utils->downloadFile($args['from-url'], $path);
+            $fileDownloader->download($args['from-url'], $path);
         } else {
-            $this->cli->fail('Specify --from-path or --from-url');
+            $this->output->fail('Specify --from-path or --from-url');
         }
 
         $merge = isset($args['skip-existing']);

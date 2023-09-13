@@ -7,6 +7,7 @@ use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Database\DatabaseLoader;
 use Sunlight\Database\SqlReader;
+use SunlightConsole\Util\CmsFacade;
 
 class ImportCommand extends Command
 {
@@ -23,9 +24,9 @@ class ImportCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
 
         $this->output->write('Reading SQL');
 

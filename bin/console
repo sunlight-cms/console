@@ -15,4 +15,6 @@ set_error_handler(function ($severity, $message, $file, $line) {
     return true;
 });
 
-exit((new Cli())->run(array_slice($argv, 1)));
+require __DIR__ . '/../config/container.php';
+
+exit($container->get(Cli::class)->run(array_slice($argv, 1)));

@@ -6,6 +6,7 @@ use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Database\SqlDumper;
+use SunlightConsole\Util\CmsFacade;
 
 class DumpCommand extends Command
 {
@@ -24,9 +25,9 @@ class DumpCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
 
         if (isset($args['tables'])) {
             $tables = explode(',', $args['tables']);

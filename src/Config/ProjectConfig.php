@@ -3,7 +3,6 @@
 namespace SunlightConsole\Config;
 
 use Kuria\Options\Option;
-use SunlightConsole\Command;
 use SunlightConsole\JsonObject;
 
 class ProjectConfig extends ConfigObject
@@ -12,7 +11,7 @@ class ProjectConfig extends ConfigObject
 
     /** @var Project\CmsConfig */
     public $cms;
-    /** @var array<string, class-string<Command>> */
+    /** @var array<string, ServiceConfig> */
     public $commands;
     /** @var bool */
     public $is_fresh_project;
@@ -30,7 +29,7 @@ class ProjectConfig extends ConfigObject
         return [
             Option::bool('is-fresh-project')->default(false),
             self::nested('cms', Project\CmsConfig::class),
-            Option::list('commands', 'string')->default([])
+            self::nestedList('commands', ServiceConfig::class),
         ];
     }
 }

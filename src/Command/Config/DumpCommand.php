@@ -4,6 +4,9 @@ namespace SunlightConsole\Command\Config;
 
 use Sunlight\Util\ConfigurationFile;
 use SunlightConsole\Command;
+use SunlightConsole\Project;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\Formatter;
 
 class DumpCommand extends Command
 {
@@ -12,11 +15,11 @@ class DumpCommand extends Command
         return 'dump config.php contents';
     }
 
-    function run(array $args): int
+    function run(Project $project, CmsFacade $cms, Formatter $formatter, array $args): int
     {
-        $this->utils->ensureCmsClassesAvailable();
+        $cms->ensureClassesAvailable();
 
-        $configPath = $this->cli->getProjectRoot() . '/config.php';
+        $configPath = $project->getRoot() . '/config.php';
 
         if (!is_file($configPath)) {
             $this->output->write('The config.php file does not exist');
@@ -26,7 +29,7 @@ class DumpCommand extends Command
 
         $config = new ConfigurationFile($configPath);
         
-        $this->output->write($this->utils->dump($config->toArray()));
+        $this->output->write($formatter->dump($config->toArray()));
 
         return 0;
     }

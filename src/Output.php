@@ -26,4 +26,15 @@ class Output
         fwrite(STDERR, empty($params) ? $message : sprintf($message, ...$params));
         fwrite(STDERR, "\n");
     }
+
+    /**
+     * Fail with an error message
+     * 
+     * @psalm-return never
+     * @throws \Exception
+     */
+    function fail(string $message, ...$params): void
+    {
+        throw new \Exception(sprintf($message, ...$params));
+    }
 }

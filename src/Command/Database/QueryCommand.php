@@ -7,6 +7,8 @@ use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Database\DatabaseException;
 use Sunlight\Util\Json;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\Formatter;
 
 class QueryCommand extends Command
 {
@@ -23,10 +25,10 @@ class QueryCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, Formatter $formatter, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
         $json = isset($args['json']);
+        $cms->init();
 
         try {
             $result = DB::query($args['sql']);
@@ -54,7 +56,7 @@ class QueryCommand extends Command
                     $index = 0;
 
                     while ($row = DB::row($result)) {
-                        $this->output->write('#%d %s', ++$index, $this->utils->dump($row));
+                        $this->output->write('#%d %s', ++$index, $formatter->dump($row));
                     }
                 } else {
                     $this->output->write('No rows returned');

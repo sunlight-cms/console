@@ -4,6 +4,8 @@ namespace SunlightConsole\Command\Plugin;
 
 use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\Formatter;
 
 class ShowCommand extends Command
 {
@@ -21,19 +23,19 @@ class ShowCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, Formatter $formatter, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
 
-        $plugin = $this->utils->findPlugin($args['plugin']);
+        $plugin = $cms->findPlugin($args['plugin']);
 
         $plugin !== null
-            or $this->cli->fail('Could not find plugin "%s"', $args['plugin']);
+            or $this->output->fail('Could not find plugin "%s"', $args['plugin']);
 
         if (isset($args['object'])) {
-            $this->output->write($this->utils->dump($plugin, 2));
+            $this->output->write($formatter->dump($plugin, 2));
         } elseif (isset($args['options'])) {
-            $this->output->write($this->utils->dump($plugin->getOptions(), 4));
+            $this->output->write($formatter->dump($plugin->getOptions(), 4));
         } else {
             $this->output->write('ID: %s', $plugin->getId());
             $this->output->write('Type: %s', $plugin->getType());

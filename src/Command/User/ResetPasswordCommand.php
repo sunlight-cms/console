@@ -7,6 +7,7 @@ use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Database\Database as DB;
 use Sunlight\Util\Password;
 use Sunlight\Util\StringGenerator;
+use SunlightConsole\Util\CmsFacade;
 
 class ResetPasswordCommand extends Command
 {
@@ -23,9 +24,9 @@ class ResetPasswordCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
 
         if (strpos($args['user'], '@') !== false) {
             $cond = 'email=' . DB::val($args['user']);
@@ -36,7 +37,7 @@ class ResetPasswordCommand extends Command
         $user = DB::queryRow('SELECT id,username FROM ' . DB::table('user') . ' WHERE ' . $cond);
 
         $user !== false
-            or $this->cli->fail('Could not find user "%s"', $args['user']);
+            or $this->output->fail('Could not find user "%s"', $args['user']);
 
         $newPassword = $args['password'] ?? StringGenerator::generateString(14);
 

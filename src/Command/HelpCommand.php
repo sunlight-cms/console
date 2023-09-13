@@ -4,6 +4,8 @@ namespace SunlightConsole\Command;
 
 use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
+use SunlightConsole\Cli;
+use SunlightConsole\Util\StringHelper;
 
 class HelpCommand extends Command
 {
@@ -20,15 +22,15 @@ class HelpCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(Cli $cli, StringHelper $stringHelper, array $args): int
     {
         // help for single command only?
         if (isset($args['command'])) {
-            return $this->printCommandHelp($args['command']);
+            return $this->printCommandHelp($cli, $args['command']);
         }
 
         // usage
-        $this->output->write('Usage: %s <command> [options] [args]', $_SERVER['PHP_SELF']);
+        $this->output->write('Usage: %s <command> [options] [args]', $_SERVER['PHP_SELF'] ?? 'console');
         $this->output->write('');
         $this->output->write('You can pass --help to any command to show help for it.');
         $this->output->write('');
@@ -37,8 +39,8 @@ class HelpCommand extends Command
         $this->output->write('Available commands:');
         $this->output->write('');
 
-        $commandNames = $this->cli->getCommandNames();
-        $commandNamePadding = $this->utils->getMaxStringLength($commandNames);
+        $commandNames = $cli->getCommandNames();
+        $commandNamePadding = $stringHelper->getMaxStringLength($commandNames);
         $commandNamePaddingStr = str_repeat(' ', $commandNamePadding);
 
         foreach ($commandNames as $index => $commandName) {
@@ -47,7 +49,8 @@ class HelpCommand extends Command
             }
 
             // command name and help
-            $command = $this->cli->getCommand($commandName);
+            /** @var Command */
+            $command = $cli->getCommand($commandName);
             $this->output->write("%-{$commandNamePadding}s    %s", $commandName, $command->getHelp());
 
             // arguments
@@ -59,9 +62,9 @@ class HelpCommand extends Command
         return 0;
     }
 
-    private function printCommandHelp(string $commandName): int
+    private function printCommandHelp(Cli $cli, string $commandName): int
     {
-        $command = $this->cli->matchCommand($commandName);
+        $command = $cli->matchCommand($commandName);
 
         if ($command === null) {
             $this->output->write('Unknown command');
@@ -78,7 +81,7 @@ class HelpCommand extends Command
         $this->output->write('');
         $this->output->write(
             'Usage: %s %s%s',
-             $_SERVER['PHP_SELF'],
+             $_SERVER['PHP_SELF'] ?? 'console',
              $command->getName(),
              !empty($formattedArgs) ? ' ' . implode(' ', $formattedArgs) : ''
         );

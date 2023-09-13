@@ -5,6 +5,8 @@ namespace SunlightConsole\Command\Plugin;
 use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Core;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\Formatter;
 
 class ActionCommand extends Command
 {
@@ -21,16 +23,15 @@ class ActionCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, Formatter $formatter, array $args): int
     {
-        $this->utils->ensureCmsClassesAvailable();
-        $this->utils->initCms($this->cli->getProjectRoot(), ['env' => Core::ENV_ADMIN]);
+        $cms->init(['env' => Core::ENV_ADMIN]);
         
         // get plugin
-        $plugin = $this->utils->findPlugin($args['plugin']);
+        $plugin = $cms->findPlugin($args['plugin']);
 
         $plugin !== null
-            or $this->cli->fail('Could not find plugin "%s"', $args['plugin']);
+            or $this->output->fail('Could not find plugin "%s"', $args['plugin']);
 
         // list actions?
         if (!isset($args['action'])) {
@@ -48,7 +49,7 @@ class ActionCommand extends Command
         $action = $plugin->getAction($args['action']);
 
         $action !== null
-            or $this->cli->fail('Plugin action "%s" does not exist or is currently unavailable', $args['action']);
+            or $this->output->fail('Plugin action "%s" does not exist or is currently unavailable', $args['action']);
 
         // run
         $this->output->write('Running plugin action %s', get_class($action));
@@ -57,12 +58,12 @@ class ActionCommand extends Command
 
         if ($result->hasMessages()) {
             foreach ($result->getMessages() as $message) {
-                $this->output->write($this->utils->renderMessage($message));
+                $this->output->write($formatter->message($message));
             }
         } elseif ($result->hasOutput()) {
             $this->output->write('Plugin action has not returned any messages. Showing plaintext output below:');
             $this->output->write('');
-            $this->output->write(trim($this->utils->htmlToPlaintext($result->getOutput())));
+            $this->output->write(trim($formatter->htmlAsPlaintext((string) $result->getOutput())));
         } else {
             $this->output->write('Plugin action has not returned any messages or output');
         }

@@ -2,27 +2,27 @@
 
 namespace SunlightConsole\Cms;
 
-use SunlightConsole\Cli;
 use SunlightConsole\Config\ProjectConfig;
 use SunlightConsole\JsonObject;
 use SunlightConsole\Output;
+use SunlightConsole\Project;
 
 class ComposerJsonUpdater
 {
-    /** @var Cli */
-    private $cli;
+    /** @var Project */
+    private $project;
     /** @var Output */
     private $output;
 
-    function __construct(Cli $cli, Output $output)
+    function __construct(Project $project, Output $output)
     {
-        $this->cli = $cli;
+        $this->project = $project;
         $this->output = $output;
     }
 
     function updateProjectConfig(array $updates): void
     {
-        $composerJson = JsonObject::fromFile($this->cli->getProjectRoot() . '/composer.json');
+        $composerJson = JsonObject::fromFile($this->project->getComposerJsonPath());
         $composerJson->exchangeArray(
             array_replace_recursive(
                 $composerJson->getArrayCopy(),
@@ -39,7 +39,7 @@ class ComposerJsonUpdater
         bool $isFreshProject
     ): void {
         // load project composer.json
-        $composerJson = JsonObject::fromFile($this->cli->getProjectRoot() . '/composer.json');
+        $composerJson = JsonObject::fromFile($this->project->getComposerJsonPath());
 
         // load archive composer.json
         if ($extractionResult->composerJson !== null) {

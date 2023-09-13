@@ -8,6 +8,8 @@ use Sunlight\Util\Filesystem;
 use SunlightConsole\Argument\ArgumentDefinition;
 use SunlightConsole\Cms\ComposerJsonUpdater;
 use SunlightConsole\Command;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\FileDownloader;
 
 class PatchCommand extends Command
 {
@@ -25,9 +27,13 @@ class PatchCommand extends Command
         ];
     }
 
-    function run(array $args): int
-    {
-        $this->utils->initCms($this->cli->getProjectRoot());
+    function run(
+        FileDownloader $fileDownloader,
+        CmsFacade $cms,
+        ComposerJsonUpdater $composerJsonUpdater,
+        array $args
+    ): int {
+        $cms->init();
 
         // get patch archive
         if (isset($args['from-path'])) {
@@ -37,9 +43,9 @@ class PatchCommand extends Command
             $path = $tmpFile->getPathname();
 
             $this->output->write('Downloading %s', $args['from-url']);
-            $this->utils->downloadFile($args['from-url'], $path);
+            $fileDownloader->download($args['from-url'], $path);
         } else {
-            $this->cli->fail('Specify --from-path or --from-url');
+            $this->output->fail('Specify --from-path or --from-url');
         }
 
         // load patch
@@ -73,9 +79,7 @@ class PatchCommand extends Command
         // update composer.json
         if (!isset($args['keep-version'])) {
             $this->output->write('Updating composer.json');
-
-            (new ComposerJsonUpdater($this->cli, $this->output))
-                ->updateProjectConfig(['cms' => ['version' => $newVersion]]);
+            $composerJsonUpdater->updateProjectConfig(['cms' => ['version' => $newVersion]]);
         }
 
         $this->output->write('Done');

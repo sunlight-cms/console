@@ -5,6 +5,8 @@ namespace SunlightConsole\Command\Cms;
 use Sunlight\Core;
 use Sunlight\VersionChecker;
 use SunlightConsole\Command;
+use SunlightConsole\Project;
+use SunlightConsole\Util\CmsFacade;
 
 class InfoCommand extends Command
 {
@@ -13,7 +15,7 @@ class InfoCommand extends Command
         return 'show information about the CMS';
     }
 
-    function run(array $args): int
+    function run(Project $project, CmsFacade $cms, array $args): int
     {
         // check if classes are available
         if (!class_exists(Core::class)) {
@@ -27,8 +29,8 @@ class InfoCommand extends Command
         $this->output->write('Distribution type: %s', Core::DIST);
 
         // latest version info
-        if (is_file($this->cli->getProjectRoot() . '/config.php')) {
-            $this->utils->initCms($this->cli->getProjectRoot());
+        if (is_file($project->getRoot() . '/config.php')) {
+            $cms->init();
 
             $versionData = VersionChecker::check();
 

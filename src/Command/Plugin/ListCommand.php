@@ -4,6 +4,8 @@ namespace SunlightConsole\Command\Plugin;
 
 use SunlightConsole\Command;
 use Sunlight\Core;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\StringHelper;
 
 class ListCommand extends Command
 {
@@ -12,13 +14,13 @@ class ListCommand extends Command
         return 'list all plugins';
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, StringHelper $stringHelper, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
         
         $plugins = Core::$pluginManager->getPlugins();
         $allPlugins = $plugins->map + $plugins->inactiveMap;
-        $pluginNamePadding = $this->utils->getMaxStringLength(array_keys($allPlugins));
+        $pluginNamePadding = $stringHelper->getMaxStringLength(array_keys($allPlugins));
 
         foreach ($allPlugins as $id => $plugin) {
             $this->output->write("%-{$pluginNamePadding}s    %s", $id, $plugin->getStatus());

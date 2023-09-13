@@ -21,9 +21,8 @@ class DownloadCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFetcher $fetcher, array $args): int
     {
-        $fetcher = CmsFetcher::factory($this->cli, $this->utils, $this->output);
         $fetcher->fetch(isset($args['overwrite']), isset($args['with-installer']));
 
         $this->output->write('Done');

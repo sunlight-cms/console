@@ -83,13 +83,34 @@ abstract class ConfigObject
     {
         $node = Option::node($name, ...$type::getDefinition());
         $node->normalize(function (Node $node) use ($type) {
-            $object = new $type();
-            $object->hydrate($node->toArray());
-
-            return $object;
+            return $type::fromNode($node);
         });
 
         return $node;
+    }
+
+    /**
+     * @param class-string<self> $type
+     */
+    protected static function nestedList(string $name, string $type): NodeOption
+    {
+        $node = Option::nodeList($name, ...$type::getDefinition());
+        $node->normalize(function (array $nodes) use ($type) {
+            return array_map([$type, 'fromNode'], $nodes);
+        });
+
+        return $node;
+    }
+
+    /**
+     * @return static
+     */
+    protected static function fromNode(Node $node): self
+    {
+        $object = new static();
+        $object->hydrate($node->toArray());
+
+        return $object;
     }
 
     private static function getResolver(): Resolver

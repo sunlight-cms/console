@@ -2,11 +2,12 @@
 
 namespace SunlightConsole\Command\Log;
 
-use Sunlight\Log\LogEntry;
 use Sunlight\Log\LogQuery;
 use Sunlight\Logger;
 use SunlightConsole\Argument\ArgumentDefinition;
 use SunlightConsole\Command;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\Formatter;
 
 class SearchCommand extends Command
 {
@@ -33,9 +34,9 @@ class SearchCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, Formatter $formatter, array $args): int
     {
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
 
         $query = $this->createQuery($args);
         $entries = Logger::search($query);
@@ -47,7 +48,7 @@ class SearchCommand extends Command
         }
 
         foreach ($entries as $entry) {
-            $this->output->write($this->utils->renderLogEntry($entry));
+            $this->output->write($formatter->logEntry($entry));
         }
 
         return 0;
@@ -82,7 +83,7 @@ class SearchCommand extends Command
         foreach ($numericOptionMap as $option => $prop) {
             if (isset($args[$option])) {
                 ctype_digit($args[$option])
-                    or $this->cli->fail('Invalid --%s, a number is required', $option);
+                    or $this->output->fail('Invalid --%s, a number is required', $option);
 
                 $query->{$prop} = (int) $args[$option];
             }
@@ -94,12 +95,12 @@ class SearchCommand extends Command
                 $maxLevel = (int) $args['max-level'];
 
                 isset(Logger::LEVEL_NAMES[$maxLevel])
-                    or $this->cli->fail('Invalid --max-level, valid levels are %d to %d', Logger::EMERGENCY, Logger::DEBUG);
+                    or $this->output->fail('Invalid --max-level, valid levels are %d to %d', Logger::EMERGENCY, Logger::DEBUG);
             } else {
                 $maxLevel = array_search($args['max-level'], Logger::LEVEL_NAMES, true);
 
                 $maxLevel !== false
-                    or $this->cli->fail('Invalid --max-level, valid names are: %s', implode(', ', Logger::LEVEL_NAMES));
+                    or $this->output->fail('Invalid --max-level, valid names are: %s', implode(', ', Logger::LEVEL_NAMES));
             }
 
             $query->maxLevel = $maxLevel;
@@ -110,7 +111,7 @@ class SearchCommand extends Command
             $since = strtotime($args['since']);
 
             $since !== false
-                or $this->cli->fail('Could not convert --since value to a timestamp');
+                or $this->output->fail('Could not convert --since value to a timestamp');
 
             $query->since = $since;
         }
@@ -120,7 +121,7 @@ class SearchCommand extends Command
             $until = strtotime($args['until']);
 
             $until !== false
-                or $this->cli->fail('Could not convert --until value to a timestamp');
+                or $this->output->fail('Could not convert --until value to a timestamp');
 
             $query->until = $until;
         }

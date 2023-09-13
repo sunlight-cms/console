@@ -7,6 +7,8 @@ use Sunlight\Log\LogQuery;
 use Sunlight\Logger;
 use SunlightConsole\Argument\ArgumentDefinition;
 use SunlightConsole\Command;
+use SunlightConsole\Util\CmsFacade;
+use SunlightConsole\Util\Formatter;
 
 class MonitorCommand extends Command
 {
@@ -26,7 +28,7 @@ class MonitorCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, Formatter $formatter, array $args): int
     {
         $limit = max(1, (int) ($args['limit'] ?? 10));
         $loadLimit = max(1, (int) ($args['load-limit'] ?? 100));
@@ -34,7 +36,7 @@ class MonitorCommand extends Command
         $newOnly = isset($args['new-only']);
         $bell = isset($args['bell']);
 
-        $this->utils->initCms($this->cli->getProjectRoot());
+        $cms->init();
         
         $isFirstQuery = true;
         $lastSeenEntryId = null;
@@ -53,7 +55,7 @@ class MonitorCommand extends Command
                 }
 
                 foreach ($entries as $entry) {
-                    $this->output->write($this->utils->renderLogEntry($entry));
+                    $this->output->write($formatter->logEntry($entry));
                     $lastSeenEntryId = $entry->id;
                 }
             }

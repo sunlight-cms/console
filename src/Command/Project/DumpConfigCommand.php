@@ -4,6 +4,7 @@ namespace SunlightConsole\Command\Project;
 
 use SunlightConsole\Command;
 use SunlightConsole\JsonObject;
+use SunlightConsole\Project;
 
 class DumpConfigCommand extends Command
 {
@@ -12,11 +13,9 @@ class DumpConfigCommand extends Command
         return 'dump resolved project configuration';
     }
 
-    function run(array $args): int
+    function run(Project $project, array $args): int
     {
-        $projectConfig = $this->cli->getProjectConfig();
-
-        $this->output->write(JsonObject::fromData($projectConfig->toArray())->encode());
+        $this->output->write(JsonObject::fromData($project->getConfig()->toArray())->encode());
 
         return 0;
     }

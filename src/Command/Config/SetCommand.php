@@ -6,6 +6,8 @@ use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Util\ConfigurationFile;
 use Sunlight\Util\StringGenerator;
+use SunlightConsole\Project;
+use SunlightConsole\Util\CmsFacade;
 
 class SetCommand extends Command
 {
@@ -35,11 +37,11 @@ class SetCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(Project $project, CmsFacade $cms, array $args): int
     {
-        $this->utils->ensureCmsClassesAvailable();
+        $cms->ensureClassesAvailable();
 
-        $configPath = $this->cli->getProjectRoot() . '/config.php';
+        $configPath = $project->getRoot() . '/config.php';
 
         if (!is_file($configPath)) {
             $this->output->write('The config.php file does not exist');
@@ -83,7 +85,7 @@ class SetCommand extends Command
                 // trusted_proxy_headers
                 case 'trusted_proxy_headers':
                     in_array($value, ['forwarded', 'x-forwarded', 'all', 'null', ''], true)
-                        or $this->cli->fail('Invalid trusted_proxy_headers value');
+                        or $this->output->fail('Invalid trusted_proxy_headers value');
 
                     $config[$key] = $value !== 'null' && $value !== '' ? $value : null;
 

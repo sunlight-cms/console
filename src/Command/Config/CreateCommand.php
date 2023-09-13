@@ -5,6 +5,8 @@ namespace SunlightConsole\Command\Config;
 use SunlightConsole\Command;
 use Sunlight\Util\ConfigurationFile;
 use Sunlight\Util\StringGenerator;
+use SunlightConsole\Project;
+use SunlightConsole\Util\CmsFacade;
 
 class CreateCommand extends Command
 {
@@ -13,12 +15,12 @@ class CreateCommand extends Command
         return 'create config.php with default contents';
     }
 
-    function run(array $args): int
+    function run(Project $project, CmsFacade $cms, array $args): int
     {
-        $this->utils->ensureCmsClassesAvailable();
+        $cms->ensureClassesAvailable();
 
-        $configPath = $this->cli->getProjectRoot() . '/config.php';
-        $configTemplatePath = $this->cli->getProjectRoot() . '/system/config_template.php';
+        $configPath = $project->getRoot() . '/config.php';
+        $configTemplatePath = $project->getRoot() . '/system/config_template.php';
 
         if (is_file($configPath)) {
             $this->output->write('The config.php file already exists');

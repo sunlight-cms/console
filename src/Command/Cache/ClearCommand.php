@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace SunlightConsole\Command;
+namespace SunlightConsole\Command\Cache;
 
 use SunlightConsole\Command;
 use SunlightConsole\Argument\ArgumentDefinition;
 use Sunlight\Core;
 use Sunlight\Composer\ComposerBridge;
+use SunlightConsole\Util\CmsFacade;
 
-class ClearCacheCommand extends Command
+class ClearCommand extends Command
 {
     function getHelp(): string
     {
@@ -21,19 +22,19 @@ class ClearCacheCommand extends Command
         ];
     }
 
-    function run(array $args): int
+    function run(CmsFacade $cms, array $args): int
     {
         if (isset($args['plugin'])) {
-            $this->utils->initCms($this->cli->getProjectRoot());
+            $cms->init();
 
             if ($args['plugin'] === '') {
                 $this->output->write('Clearing plugin cache');
                 Core::$pluginManager->clearCache();
             } else {
-                $plugin = $this->utils->findPlugin($args['plugin']);
+                $plugin = $cms->findPlugin($args['plugin']);
 
                 $plugin !== null
-                    or $this->cli->fail('Could not find plugin "%s"', $args['plugin']);
+                    or $this->output->fail('Could not find plugin "%s"', $args['plugin']);
 
                 $this->output->write('Clearing cache for plugin "%s"', $plugin->getId());
                 $plugin->getCache()->clear();

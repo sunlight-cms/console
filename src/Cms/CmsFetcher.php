@@ -2,52 +2,41 @@
 
 namespace SunlightConsole\Cms;
 
-use SunlightConsole\Cli;
 use SunlightConsole\Config\Project\CmsConfig;
 use SunlightConsole\Output;
-use SunlightConsole\Utils;
+use SunlightConsole\Project;
+use SunlightConsole\Util\FileDownloader;
 
 class CmsFetcher
 {
-    /** @var Cli */
-    private $cli;
-    /** @var Utils */
-    private $utils;
+    /** @var Project */
+    private $project;
     /** @var Output */
     private $output;
     /** @var CmsLocator */
     private $locator;
     /** @var ComposerJsonUpdater */
     private $composerJsonUpdater;
+    /** @var FileDownloader */
+    private $fileDownloader;
 
     function __construct(
-        Cli $cli,
-        Utils $utils,
+        Project $project,
         Output $output,
         CmsLocator $locator,
-        ComposerJsonUpdater $composerJsonUpdater
+        ComposerJsonUpdater $composerJsonUpdater,
+        FileDownloader $fileDownloader,
     ) {
-        $this->cli = $cli;
-        $this->utils = $utils;
+        $this->project = $project;
         $this->output = $output;
         $this->locator = $locator;
         $this->composerJsonUpdater = $composerJsonUpdater;
-    }
-
-    static function factory(Cli $cli, Utils $utils, Output $output): self
-    {
-        return new self(
-            $cli,
-            $utils,
-            $output,
-            new CmsLocator(),
-            new ComposerJsonUpdater($cli, $output)
-        );
+        $this->fileDownloader = $fileDownloader;
     }
 
     function fetch(bool $overwrite = false, bool $forceInstaller = false): void
     {
-        $projectConfig = $this->cli->getProjectConfig();
+        $projectConfig = $this->project->getConfig();
         $extractor = $this->createExtractor($projectConfig->cms, $forceInstaller);
 
         // abort if files exist?
@@ -62,13 +51,11 @@ class CmsFetcher
         $archiveParams = $this->locator->locate($projectConfig->cms);
 
         // download
-        $this->output->log('Downloading %s', $archiveParams->url);
-
         $tempPath = tempnam(sys_get_temp_dir(), 'slcms')
-            or $this->cli->fail('Could not create a temporary file'); 
+            or $this->output->fail('Could not create a temporary file'); 
 
         try {
-            $this->utils->downloadFile($archiveParams->url, $tempPath);
+            $this->fileDownloader->download($archiveParams->url, $tempPath);
 
             // extract
             $this->output->log('Extracting archive');
@@ -97,7 +84,7 @@ class CmsFetcher
 
     private function createExtractor(CmsConfig $cmsConfig, bool $forceInstaller): CmsExtractor
     {
-        $extractor = new CmsExtractor($this->cli->getProjectRoot());
+        $extractor = new CmsExtractor($this->project->getRoot());
 
         if ($forceInstaller || $cmsConfig->installer && !$extractor->filesAlreadyExist()) {
             $extractor->addInstaller();
