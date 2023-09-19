@@ -50,7 +50,7 @@ class CmsFacade
             Core::$classLoader = require $this->project->getRoot() . '/vendor/autoload.php';
 
             // init core
-            Core::init($options + ['session_enabled' => false, 'debug' => true]);
+            Core::init($options + ['session_enabled' => false, 'debug' => true, 'error_handler' => false]);
         } catch (\Throwable $e) {
             throw new \Exception(sprintf(
                 'Could not initialize CMS: %s in %s:%d',
