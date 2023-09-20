@@ -19,7 +19,6 @@ $container->define(
     Def::service(Cms\Archive\Locator::class),
     Def::service(Cms\CmsFacade::class),
     Def::service(Cms\CmsFetcher::class),
-    Def::service(Cms\ComposerJsonUpdater::class),
 
     // utils
     Def::service(Util\FileDownloader::class),

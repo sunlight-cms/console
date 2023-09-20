@@ -23,9 +23,9 @@ class Project
         return $this->config ?? ($this->config = $this->loadConfig());
     }
 
-    function getComposerJsonPath(): string
+    function getComposerJson(): JsonObject
     {
-        return $this->getRoot() . '/composer.json';
+        return JsonObject::fromFile($this->getRoot() . '/composer.json');
     }
 
     private function determineRoot(): string
@@ -59,16 +59,10 @@ class Project
     private function loadConfig(): ProjectConfig
     {
         try {
-            return ProjectConfig::loadFromComposerJson(
-                JsonObject::fromFile($this->getComposerJsonPath())
-            );
+            return ProjectConfig::loadFromComposerJson($this->getComposerJson());
         } catch (ResolverException $e) {
             throw new \Exception(
-                sprintf(
-                    "Invalid extra[%s] configuration in \"%s\"",
-                    ProjectConfig::COMPOSER_EXTRA_KEY,
-                    $this->getComposerJsonPath()
-                ),
+                sprintf("Invalid configuration in composer.json (extra.%s)", ProjectConfig::COMPOSER_EXTRA_KEY),
                 0,
                 $e
             );

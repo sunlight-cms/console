@@ -2,86 +2,72 @@
 
 namespace SunlightConsole\Cms;
 
-use SunlightConsole\Cms\Archive\ExtractionResult;
 use SunlightConsole\Config\ProjectConfig;
 use SunlightConsole\JsonObject;
 use SunlightConsole\Output;
-use SunlightConsole\Project;
 
 class ComposerJsonUpdater
 {
-    /** @var Project */
-    private $project;
+    /** @var JsonObject */
+    private $package;
     /** @var Output */
     private $output;
 
-    function __construct(Project $project, Output $output)
+    function __construct(JsonObject $package, Output $output)
     {
-        $this->project = $project;
+        $this->package = $package;
         $this->output = $output;
     }
 
     function updateProjectConfig(array $updates): void
     {
-        $composerJson = JsonObject::fromFile($this->project->getComposerJsonPath());
-        $composerJson->exchangeArray(
+        $this->package->exchangeArray(
             array_replace_recursive(
-                $composerJson->getArrayCopy(),
+                $this->package->getArrayCopy(),
                 ['extra' => [ProjectConfig::COMPOSER_EXTRA_KEY => $updates]]
             )
         );
-
-        $composerJson->save();
     }
 
-    function updateAfterExtraction(
-        ExtractionResult $extractionResult,
-        bool $archiveIsSemverMatched,
-        bool $isFreshProject
-    ): void {
-        // load project composer.json
-        $composerJson = JsonObject::fromFile($this->project->getComposerJsonPath());
+    function updateFreshProject(?string $cmsVersion): void
+    {
+        unset(
+            $this->package['name'],
+            $this->package['description'],
+            $this->package['license'],
+            $this->package['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['is-fresh-project']
+        );
 
-        // load archive composer.json
-        if ($extractionResult->composerJson !== null) {
-            $archiveComposerJson = JsonObject::fromJson($extractionResult->composerJson);
-        } else {
-            $archiveComposerJson = null;
+        if ($cmsVersion !== null) {
+            $this->output->log('Setting cms.version to %s', $cmsVersion);
+            $this->package['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['cms']['version'] = $cmsVersion;
         }
+    }
 
-        // fresh project updates
-        if ($isFreshProject) {
-            unset(
-                $composerJson['name'],
-                $composerJson['description'],
-                $composerJson['license'],
-                $composerJson['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['is-fresh-project']
-            );
+    function updateDependencies(array $newDependencies): void
+    {
+        $changed = false;
 
-            if ($archiveIsSemverMatched && $extractionResult->version !== null) {
-                $this->output->log('Setting cms.version to %s', $extractionResult->version);
-                $composerJson['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['cms']['version'] = $extractionResult->version;
+        foreach ($newDependencies as $package => $version) {
+            if (!isset($this->package['require'][$package]) || $this->package['require'][$package] !== $version) {
+                $this->output->log(
+                    isset($this->package['require'][$package])
+                        ? 'Updating %s dependency in composer.json'
+                        : 'Adding %s dependency to composer.json',
+                    $package
+                );
+                $this->package['require'][$package] = $version;
+                $changed = true;
             }
         }
 
-        // update dependencies
-        if ($archiveComposerJson !== null) {
-            foreach ($archiveComposerJson['require'] ?? [] as $package => $version) {
-                if (!isset($composerJson['require'][$package]) || $composerJson['require'][$package] !== $version) {
-                    $this->output->log(
-                        isset($composerJson['require'][$package])
-                            ? 'Updating %s dependency in composer.json'
-                            : 'Adding %s dependency to composer.json',
-                        $package
-                    );
-                    $composerJson['require'][$package] = $version;
-                }
-            }
-        } else {
-            $this->output->log('Warning: There is no valid composer.json in the archive - not updating dependencies!');
+        if ($changed) {
+            $this->output->log('Warning: Dependencies have changed - you should run composer update now');
         }
+    }
 
-        // save changes
-        $composerJson->save();
+    function save(): void
+    {
+        $this->package->save();
     }
 }

@@ -5,6 +5,7 @@ namespace SunlightConsole\Cms;
 use SunlightConsole\Cms\Archive\Extractor;
 use SunlightConsole\Cms\Archive\Locator;
 use SunlightConsole\Config\Project\CmsConfig;
+use SunlightConsole\JsonObject;
 use SunlightConsole\Output;
 use SunlightConsole\Project;
 use SunlightConsole\Util\FileDownloader;
@@ -17,8 +18,6 @@ class CmsFetcher
     private $output;
     /** @var Locator */
     private $locator;
-    /** @var ComposerJsonUpdater */
-    private $composerJsonUpdater;
     /** @var FileDownloader */
     private $fileDownloader;
 
@@ -26,13 +25,11 @@ class CmsFetcher
         Project $project,
         Output $output,
         Locator $locator,
-        ComposerJsonUpdater $composerJsonUpdater,
         FileDownloader $fileDownloader
     ) {
         $this->project = $project;
         $this->output = $output;
         $this->locator = $locator;
-        $this->composerJsonUpdater = $composerJsonUpdater;
         $this->fileDownloader = $fileDownloader;
     }
 
@@ -77,11 +74,23 @@ class CmsFetcher
 
         // update composer.json
         $this->output->log('Updating composer.json');
-        $this->composerJsonUpdater->updateAfterExtraction(
-            $result,
-            $archiveParams->isSemverMatched,
-            $projectConfig->is_fresh_project
-        );
+
+        $composerJsonUpdater = new ComposerJsonUpdater($this->project->getComposerJson(), $this->output);
+
+        if ($projectConfig->is_fresh_project) {
+            // update fresh project
+            $composerJsonUpdater->updateFreshProject($archiveParams->isSemverMatched ? $archiveParams->version : null);
+        }
+
+        if ($result->composerJson !== null) {
+            // update dependencies
+            $archiveComposerJson = JsonObject::fromJson($result->composerJson);
+            $composerJsonUpdater->updateDependencies($archiveComposerJson['require'] ?? []);
+        } else {
+            $this->output->log('Warning: No composer.json in the archive - not updating dependencies');
+        }
+
+        $composerJsonUpdater->save();
     }
 
     private function createExtractor(CmsConfig $cmsConfig, bool $forceInstaller): Extractor

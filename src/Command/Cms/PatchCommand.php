@@ -9,6 +9,8 @@ use SunlightConsole\Argument\ArgumentDefinition;
 use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Cms\ComposerJsonUpdater;
 use SunlightConsole\Command;
+use SunlightConsole\JsonObject;
+use SunlightConsole\Project;
 use SunlightConsole\Util\FileDownloader;
 
 class PatchCommand extends Command
@@ -28,9 +30,9 @@ class PatchCommand extends Command
     }
 
     function run(
-        FileDownloader $fileDownloader,
+        Project $project,
         CmsFacade $cms,
-        ComposerJsonUpdater $composerJsonUpdater,
+        FileDownloader $fileDownloader,
         array $args
     ): int {
         $cms->init();
@@ -61,10 +63,18 @@ class PatchCommand extends Command
             return 1;
         }
 
+        // prepare arguments
+        $directories = $patch->getMetaData('directory_list');
+        $files = $patch->getMetaData('file_list');
+
+        // do not overwrite composer.json or the vendor directory
+        $this->removeListValue($directories, 'vendor');
+        $patchHasComposerJson = $this->removeListValue($files, 'composer.json');
+
         // apply patch
         $this->output->write('Applying patch');
 
-        if (!$restorer->restore(true, null, null, $errors)) {
+        if (!$restorer->restore(true, $directories, $files, $errors)) {
             $this->output->write('Cannot apply patch:');
             $this->printErrorList($errors);
 
@@ -75,10 +85,24 @@ class PatchCommand extends Command
         $this->output->write('CMS version is now %s', $newVersion);
 
         // update composer.json
+        $this->output->write('Updating composer.json');
+        $composerJsonUpdater = new ComposerJsonUpdater($project->getComposerJson(), $this->output);
+
         if (!isset($args['keep-version'])) {
-            $this->output->write('Updating composer.json');
+            // update cms.version
             $composerJsonUpdater->updateProjectConfig(['cms' => ['version' => $newVersion]]);
         }
+
+        if (
+            $patchHasComposerJson
+            && ($patchComposerJson = $patch->getFile($patch->getDataPath() . '/composer.json')) !== null
+        ) {
+            // update dependencies
+            $patchComposerJson = JsonObject::fromJson($patchComposerJson);
+            $composerJsonUpdater->updateDependencies($patchComposerJson['require'] ?? []);
+        }
+
+        $composerJsonUpdater->save();
 
         $this->output->write('Done');
 
@@ -90,5 +114,18 @@ class PatchCommand extends Command
         foreach ($errors as $error) {
             $this->output->write('- %s', $error);
         }
+    }
+
+    private function removeListValue(array &$list, string $value): bool
+    {
+        $offset = array_search($value, $list, true);
+
+        if ($offset !== false) {
+            array_splice($list, $offset, 1);
+
+            return true;
+        }
+
+        return false;
     }
 }
