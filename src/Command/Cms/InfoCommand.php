@@ -26,7 +26,6 @@ class InfoCommand extends Command
 
         // version info
         $this->output->write('Installed version: %s', Core::VERSION);
-        $this->output->write('Distribution type: %s', Core::DIST);
 
         // latest version info
         if (is_file($project->getRoot() . '/config.php')) {
