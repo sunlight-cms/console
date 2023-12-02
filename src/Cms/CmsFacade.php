@@ -2,6 +2,7 @@
 
 namespace SunlightConsole\Cms;
 
+use Composer\Semver\Semver;
 use Sunlight\Core;
 use Sunlight\Database\Database;
 use Sunlight\Plugin\Plugin;
@@ -9,6 +10,8 @@ use SunlightConsole\Project;
 
 class CmsFacade
 {
+    private const CORE_VERSION_CONSTRAINT = '^8.1';
+
     /** @var Project */
     private $project;
 
@@ -42,6 +45,10 @@ class CmsFacade
 
         if (Core::isReady()) {
             throw new \Exception('Core is already initialized');
+        }
+
+        if (!Semver::satisfies(Core::VERSION, self::CORE_VERSION_CONSTRAINT)) {
+            throw new \Exception(sprintf('CMS version %s is not supported, version %s is required', Core::VERSION, self::CORE_VERSION_CONSTRAINT));
         }
 
         try {
