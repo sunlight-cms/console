@@ -90,7 +90,7 @@ class PatchCommand extends Command
 
         if (!isset($args['keep-version'])) {
             // update cms.version
-            $composerJsonUpdater->updateProjectConfig(['cms' => ['version' => $newVersion]]);
+            $composerJsonUpdater->updateCmsVersion($newVersion);
         }
 
         if (

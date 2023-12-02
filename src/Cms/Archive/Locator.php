@@ -3,6 +3,7 @@
 namespace SunlightConsole\Cms\Archive;
 
 use Composer\Semver\Semver;
+use SunlightConsole\Cms\CmsFacade;
 use SunlightConsole\Config\Project\Cms\ArchiveConfig;
 use SunlightConsole\Config\Project\CmsConfig;
 
@@ -13,6 +14,7 @@ class Locator
         $params = new ArchiveParams();
         $params->pathsPrefix = $cmsConfig->archive->zip_paths_prefix;
         $params->isSemverMatched = false;
+        $params->isLatestVersion = false;
 
         // prepare params
         if ($cmsConfig->archive->zip_url !== null) {
@@ -50,6 +52,11 @@ class Locator
                 $params->version = $version;
             } else {
                 // try to match a constraint against existing tags
+                if ($version === 'latest') {
+                    $version = CmsFacade::CORE_VERSION_CONSTRAINT;
+                    $params->isLatestVersion = true;
+                }
+
                 $params->version = $this->getLatestVersionFromGitTags($archiveConfig, $version);
                 $params->isSemverMatched = true;
             }

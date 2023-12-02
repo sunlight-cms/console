@@ -12,4 +12,6 @@ class ArchiveParams
     public $pathsPrefix;
     /** @var bool */
     public $isSemverMatched;
+    /** @var bool */
+    public $isLatestVersion;
 }

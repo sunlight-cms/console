@@ -29,7 +29,7 @@ class ComposerJsonUpdater
         );
     }
 
-    function updateFreshProject(?string $cmsVersion): void
+    function updateFreshProject(): void
     {
         unset(
             $this->package['name'],
@@ -37,11 +37,12 @@ class ComposerJsonUpdater
             $this->package['license'],
             $this->package['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['is-fresh-project']
         );
+    }
 
-        if ($cmsVersion !== null) {
-            $this->output->log('Setting cms.version to %s', $cmsVersion);
-            $this->package['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['cms']['version'] = $cmsVersion;
-        }
+    function updateCmsVersion(string $newVersion): void
+    {
+        $this->output->log('Setting cms.version to %s', $newVersion);
+        $this->package['extra'][ProjectConfig::COMPOSER_EXTRA_KEY]['cms']['version'] = $newVersion;
     }
 
     function updateDependencies(array $newDependencies): void

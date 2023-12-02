@@ -79,7 +79,14 @@ class CmsFetcher
 
         if ($projectConfig->is_fresh_project) {
             // update fresh project
-            $composerJsonUpdater->updateFreshProject($archiveParams->isSemverMatched ? $archiveParams->version : null);
+            $composerJsonUpdater->updateFreshProject();
+
+            if ($archiveParams->isSemverMatched) {
+                $composerJsonUpdater->updateCmsVersion($archiveParams->version);
+            }
+        } elseif ($archiveParams->isLatestVersion) {
+            // update cms.version if "latest" was used
+            $composerJsonUpdater->updateCmsVersion($archiveParams->version);
         }
 
         if ($result->composerJson !== null) {

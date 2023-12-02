@@ -10,7 +10,7 @@ use SunlightConsole\Project;
 
 class CmsFacade
 {
-    private const CORE_VERSION_CONSTRAINT = '^8.1';
+    const CORE_VERSION_CONSTRAINT = '^8.1';
 
     /** @var Project */
     private $project;
