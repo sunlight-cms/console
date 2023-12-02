@@ -22,7 +22,7 @@ class InstallCommand extends Command
         return [
             ArgumentDefinition::option('from-path', 'path to a plugin ZIP file'),
             ArgumentDefinition::option('from-url', 'plugin ZIP download URL'),
-            ArgumentDefinition::flag('skip-existing', 'skip existing plugins'),
+            ArgumentDefinition::option('mode', 'all-or-nothing|skip-existing|overwrite-existing (defaults to all-or-nothing)'),
         ];
     }
 
@@ -41,16 +41,26 @@ class InstallCommand extends Command
             $this->output->fail('Specify --from-path or --from-url');
         }
 
-        $merge = isset($args['skip-existing']);
+        $modes = [
+            'all-or-nothing' => PluginArchive::MODE_ALL_OR_NOTHING,
+            'skip-existing' => PluginArchive::MODE_SKIP_EXISTING,
+            'overwrite-existing' => PluginArchive::MODE_OVERWRITE_EXISTING,
+        ];
+
+        $mode = $modes[$args['mode'] ?? 'all-or-nothing'] ?? null;
+
+        $mode !== null
+            or $this->output->fail('Invalid mode');
+
         $archive = new PluginArchive(Core::$pluginManager, $path);
-        $plugins = $archive->extract($merge, $failedPlugins);
+        $plugins = $archive->extract($mode, $failedPlugins);
 
         foreach ($plugins as $plugin) {
             $this->output->write('Added %s', $plugin);
         }
 
         foreach ($failedPlugins as $plugin) {
-            $this->output->write($merge ? 'Skipped %s' : 'Plugin %s already exists', $plugin);
+            $this->output->write('Skipped %s', $plugin);
         }
 
         if (empty($plugins)) {
