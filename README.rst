@@ -67,7 +67,7 @@ string can have these formats:
 - ``8.0.0`` - will download the exact tagged version
 - ``~8.0.0`` - will find and download a tagged version matching
   the `constraint <https://getcomposer.org/doc/articles/versions.md>`_
-- ``"dev-master"`` - will download the latest version of the specified branch
+- ``dev-master`` - will download the latest version of the specified branch
 
 
 archive
