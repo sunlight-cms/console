@@ -10,6 +10,7 @@ class Extractor
     private $paths = [
         'admin/' => true,
         'images/' => false,
+        'plugins/config/' => false,
         'plugins/templates/.htaccess' => true,
         'plugins/.htaccess' => true,
         'system/' => true,
@@ -27,7 +28,7 @@ class Extractor
 
     function addPlugin(string $typeDirectory, string $name, bool $overwrite): void
     {
-        $this->paths["plugins/{$typeDirectory}/{$name}/config.php"] = false;
+        $this->paths["plugins/{$typeDirectory}/{$name}/config.php"] = false; // 8.0 BC
         $this->paths["plugins/{$typeDirectory}/{$name}/"] = $overwrite;
     }
 
