@@ -50,16 +50,22 @@ class ComposerJsonUpdater
         $changed = false;
 
         foreach ($newDependencies as $package => $version) {
-            if (!isset($this->package['require'][$package]) || $this->package['require'][$package] !== $version) {
-                $this->output->log(
-                    isset($this->package['require'][$package])
-                        ? 'Updating %s dependency in composer.json'
-                        : 'Adding %s dependency to composer.json',
-                    $package
-                );
-                $this->package['require'][$package] = $version;
-                $changed = true;
+            if ($package === 'php') {
+                continue;
             }
+
+            if (isset($this->package['require'][$package]) && $this->package['require'][$package] === $version) {
+                continue;
+            }
+
+            $this->output->log(
+                isset($this->package['require'][$package])
+                    ? 'Updating %s dependency in composer.json'
+                    : 'Adding %s dependency to composer.json',
+                $package
+            );
+            $this->package['require'][$package] = $version;
+            $changed = true;
         }
 
         if ($changed) {
